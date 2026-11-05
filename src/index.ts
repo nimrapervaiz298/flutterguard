@@ -86,11 +86,11 @@ program
   .option("--min <n>", "kam az kam kitni lines", "80")
   .action((dir: string, opts: { min: string }) => {
     const min = Number(opts.min);
-    const rows: { file: string; line: number; len: number }[] = [];
+    const rows: { file: string; line: number; len: number; name: string }[] = [];
     for (const f of walk(dir)) {
       if (!BRACE_EXT.has(path.extname(f))) continue;
       if (/\.(g|freezed)\.dart$/.test(f)) continue;
-      let depth = 0, start = -1;
+      let depth = 0, start = -1, startText = "";
       fs.readFileSync(f, "utf8").split("\n").forEach((raw, i) => {
         const line = raw
           .replace(/\/\/.*$/, "")
@@ -98,11 +98,11 @@ program
         for (const ch of line) {
           if (ch === "{") {
             depth++;
-            if (depth === 2) start = i;
+            if (depth === 2) { start = i; startText = raw.trim().slice(0, 50); }
           } else if (ch === "}") {
             if (depth === 2 && start >= 0) {
               const len = i - start + 1;
-              if (len >= min) rows.push({ file: f, line: start + 1, len });
+              if (len >= min) rows.push({ file: f, line: start + 1, len, name: startText });
               start = -1;
             }
             depth--;
@@ -112,7 +112,7 @@ program
     }
     rows.sort((a, b) => b.len - a.len);
     console.log(`${rows.length} lamba method(s) (${min}+ lines)`);
-    rows.slice(0, 10).forEach((r) => console.log(`${r.len} lines  ${r.file}:${r.line}`));
+    rows.slice(0, 10).forEach((r) => console.log(`${r.len} lines  ${r.file}:${r.line}  ${r.name}`));
   });
 
 program.parse();
