@@ -21,6 +21,7 @@ function walk(dir: string, out: string[] = []): string[] {
 
 const program = new Command().name("flutterguard");
 
+// ---------- check ----------
 program.command("check <dir>").action((dir: string) => {
   const stats: Record<string, { files: number; lines: number }> = {};
   const big: { file: string; lines: number }[] = [];
@@ -39,8 +40,7 @@ program.command("check <dir>").action((dir: string) => {
     .forEach((b) => console.log(`${b.lines} lines  ${b.file}`));
 });
 
-
-// secrets scan (hardcoded keys
+// ---------- secrets ----------
 const PATTERNS: [string, RegExp][] = [
   ["Google API key", /AIza[0-9A-Za-z_\-]{35}/],
   ["AWS access key", /AKIA[0-9A-Z]{16}/],
@@ -69,7 +69,7 @@ program.command("secrets <dir>").action((dir: string) => {
           (name === "Google API key" || name === "Generic secret");
         if (isFirebase) info++; else real++;
         console.log(`${isFirebase ? "INFO " : "ALERT"}  ${name}  ${f}:${i + 1}  ${m[0].slice(0, 6)}***`);
-        break; // ek line par ek hi report
+        break;
       }
     });
   }
@@ -78,22 +78,41 @@ program.command("secrets <dir>").action((dir: string) => {
   process.exitCode = real ? 1 : 0;
 });
 
-// program.command("secrets <dir>").action((dir: string) => {
-//   let found = 0;
-//   for (const f of walk(dir)) {
-//     if (!SCAN_EXT.has(path.extname(f)) && path.basename(f) !== ".env") continue;
-//     if (fs.statSync(f).size > 1_000_000) continue;
-//     fs.readFileSync(f, "utf8").split("\n").forEach((line, i) => {
-//       for (const [name, re] of PATTERNS) {
-//         const m = line.match(re);
-//         if (m) {
-//           found++;
-//           console.log(`${name}  ${f}:${i + 1}  ${m[0].slice(0, 6)}***`);
-//         }
-//       }
-//     });
-//   }
-//   console.log(found ? `${found} possible secret(s) mili` : "Koi secret nahi mili");
-//   process.exitCode = found ? 1 : 0;
-// });
+// ---------- bloat ----------
+const BRACE_EXT = new Set([".dart", ".js", ".ts", ".java", ".kt", ".swift", ".go"]);
+
+program
+  .command("bloat <dir>")
+  .option("--min <n>", "kam az kam kitni lines", "80")
+  .action((dir: string, opts: { min: string }) => {
+    const min = Number(opts.min);
+    const rows: { file: string; line: number; len: number }[] = [];
+    for (const f of walk(dir)) {
+      if (!BRACE_EXT.has(path.extname(f))) continue;
+      if (/\.(g|freezed)\.dart$/.test(f)) continue;
+      let depth = 0, start = -1;
+      fs.readFileSync(f, "utf8").split("\n").forEach((raw, i) => {
+        const line = raw
+          .replace(/\/\/.*$/, "")
+          .replace(/(["'])(?:\\.|(?!\1).)*\1/g, "");
+        for (const ch of line) {
+          if (ch === "{") {
+            depth++;
+            if (depth === 2) start = i;
+          } else if (ch === "}") {
+            if (depth === 2 && start >= 0) {
+              const len = i - start + 1;
+              if (len >= min) rows.push({ file: f, line: start + 1, len });
+              start = -1;
+            }
+            depth--;
+          }
+        }
+      });
+    }
+    rows.sort((a, b) => b.len - a.len);
+    console.log(`${rows.length} lamba method(s) (${min}+ lines)`);
+    rows.slice(0, 10).forEach((r) => console.log(`${r.len} lines  ${r.file}:${r.line}`));
+  });
+
 program.parse();
