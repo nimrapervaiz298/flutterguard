@@ -39,4 +39,61 @@ program.command("check <dir>").action((dir: string) => {
     .forEach((b) => console.log(`${b.lines} lines  ${b.file}`));
 });
 
+
+// secrets scan (hardcoded keys
+const PATTERNS: [string, RegExp][] = [
+  ["Google API key", /AIza[0-9A-Za-z_\-]{35}/],
+  ["AWS access key", /AKIA[0-9A-Z]{16}/],
+  ["Private key", /-----BEGIN (RSA |EC )?PRIVATE KEY-----/],
+  ["Generic secret", /(api[_-]?key|secret|token|password)\s*[:=]\s*["'][^"']{8,}["']/i],
+];
+const SCAN_EXT = new Set([
+  ...Object.keys(LANGS), ".json", ".yaml", ".yml", ".env",
+  ".xml", ".plist", ".gradle", ".properties",
+]);
+const FIREBASE_FILES = new Set([
+  "firebase_options.dart", "google-services.json", "GoogleService-Info.plist",
+]);
+
+program.command("secrets <dir>").action((dir: string) => {
+  let real = 0, info = 0;
+  for (const f of walk(dir)) {
+    const base = path.basename(f);
+    if (!SCAN_EXT.has(path.extname(f)) && base !== ".env") continue;
+    if (fs.statSync(f).size > 1_000_000) continue;
+    fs.readFileSync(f, "utf8").split("\n").forEach((line, i) => {
+      for (const [name, re] of PATTERNS) {
+        const m = line.match(re);
+        if (!m) continue;
+        const isFirebase = FIREBASE_FILES.has(base) &&
+          (name === "Google API key" || name === "Generic secret");
+        if (isFirebase) info++; else real++;
+        console.log(`${isFirebase ? "INFO " : "ALERT"}  ${name}  ${f}:${i + 1}  ${m[0].slice(0, 6)}***`);
+        break; // ek line par ek hi report
+      }
+    });
+  }
+  console.log(`ALERT: ${real}, INFO (Firebase config): ${info}`);
+  if (info) console.log("Firebase keys aam tor par secret nahi hoti, lekin Firestore/Storage rules aur Google Cloud mein key restrictions zaroor check karein.");
+  process.exitCode = real ? 1 : 0;
+});
+
+// program.command("secrets <dir>").action((dir: string) => {
+//   let found = 0;
+//   for (const f of walk(dir)) {
+//     if (!SCAN_EXT.has(path.extname(f)) && path.basename(f) !== ".env") continue;
+//     if (fs.statSync(f).size > 1_000_000) continue;
+//     fs.readFileSync(f, "utf8").split("\n").forEach((line, i) => {
+//       for (const [name, re] of PATTERNS) {
+//         const m = line.match(re);
+//         if (m) {
+//           found++;
+//           console.log(`${name}  ${f}:${i + 1}  ${m[0].slice(0, 6)}***`);
+//         }
+//       }
+//     });
+//   }
+//   console.log(found ? `${found} possible secret(s) mili` : "Koi secret nahi mili");
+//   process.exitCode = found ? 1 : 0;
+// });
 program.parse();
