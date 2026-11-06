@@ -2,6 +2,8 @@ import { Command } from "commander";
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
+import { registerPerf } from "./perf";
+
 
 const LANGS: Record<string, string> = {
   ".dart": "Dart", ".js": "JavaScript", ".ts": "TypeScript",
@@ -10,14 +12,35 @@ const LANGS: Record<string, string> = {
 };
 const SKIP = new Set(["node_modules", ".git", "build", ".dart_tool", "dist"]);
 
-function walk(dir: string, out: string[] = []): string[] {
+// ---------- file walking and reading (cached: each runs once per process) ----------
+function walkRaw(dir: string, out: string[] = []): string[] {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
     if (SKIP.has(e.name)) continue;
     const p = path.join(dir, e.name);
-    if (e.isDirectory()) walk(p, out);
+    if (e.isDirectory()) walkRaw(p, out);
     else out.push(p);
   }
   return out;
+}
+
+const walkCache = new Map<string, string[]>();
+function walk(dir: string): string[] {
+  let r = walkCache.get(dir);
+  if (!r) {
+    r = walkRaw(dir);
+    walkCache.set(dir, r);
+  }
+  return r;
+}
+
+const textCache = new Map<string, string>();
+function readText(f: string): string {
+  let t = textCache.get(f);
+  if (t === undefined) {
+    t = fs.readFileSync(f, "utf8");
+    textCache.set(f, t);
+  }
+  return t;
 }
 
 // ---------- secrets ----------
@@ -43,7 +66,7 @@ function findSecrets(dir: string): SecretHit[] {
     const base = path.basename(f);
     if (!SCAN_EXT.has(path.extname(f)) && base !== ".env") continue;
     if (fs.statSync(f).size > 1_000_000) continue;
-    fs.readFileSync(f, "utf8").split("\n").forEach((line, i) => {
+    readText(f).split("\n").forEach((line, i) => {
       for (const [name, re] of PATTERNS) {
         const m = line.match(re);
         if (!m) continue;
@@ -70,7 +93,7 @@ function findBloat(dir: string, min: number): BloatRow[] {
     if (!BRACE_EXT.has(path.extname(f))) continue;
     if (/\.(g|freezed)\.dart$/.test(f)) continue; // skip generated code
     let depth = 0, start = -1, startText = "";
-    fs.readFileSync(f, "utf8").split("\n").forEach((raw, i) => {
+    readText(f).split("\n").forEach((raw, i) => {
       const line = raw
         .replace(/\/\/.*$/, "")
         .replace(/(["'])(?:\\.|(?!\1).)*\1/g, "");
@@ -216,7 +239,7 @@ program.command("check <dir>").action((dir: string) => {
   for (const f of walk(dir)) {
     const lang = LANGS[path.extname(f)];
     if (!lang) continue;
-    const lines = fs.readFileSync(f, "utf8").split("\n").length;
+    const lines = readText(f).split("\n").length;
     stats[lang] ??= { files: 0, lines: 0 };
     stats[lang].files++;
     stats[lang].lines += lines;
@@ -248,12 +271,14 @@ program
 
 program.command("analyze <dir>").action((dir: string) => {
   console.log("Running flutter analyze (this can take a minute)...");
+  const t0 = Date.now();
   const a = runAnalyze(dir);
   if (!a.ran) {
     console.log(`Skipped: ${a.reason}`);
     return;
   }
   printAnalyze(a);
+  console.log(`\nDone in ${((Date.now() - t0) / 1000).toFixed(1)}s`);
   process.exitCode = a.errors ? 1 : 0;
 });
 
@@ -261,16 +286,23 @@ program
   .command("scan <dir>")
   .option("--no-analyze", "skip flutter analyze (faster)")
   .action((dir: string, opts: { analyze: boolean }) => {
+    const t0 = Date.now();
+
+    const tFiles = Date.now();
     const hits = findSecrets(dir);
     const alerts = hits.filter((h) => h.level === "ALERT");
     const infos = hits.length - alerts.length;
     const rows = findBloat(dir, 80);
     const huge = rows.filter((r) => r.len >= 200).length;
+    const filesMs = Date.now() - tFiles;
 
     let a: AnalyzeResult = { ran: false, reason: "skipped (--no-analyze)", errors: 0, warnings: 0, infos: 0, issues: [] };
+    let analyzeMs = 0;
     if (opts.analyze) {
       console.log("Running flutter analyze (this can take a minute)...");
+      const tA = Date.now();
       a = runAnalyze(dir);
+      analyzeMs = Date.now() - tA;
     }
 
     const secretPenalty = Math.min(45, alerts.length * 15);
@@ -297,7 +329,10 @@ program
       rows.slice(0, 5).forEach((r) => console.log(`  ${r.len} lines  ${r.file}:${r.line}  ${r.name}`));
     }
     console.log("\nNote: the score formula is a first version. It is an estimate, not a guarantee.");
+    console.log(
+      `\nTiming: file checks ${filesMs}ms, analyze ${(analyzeMs / 1000).toFixed(1)}s, total ${((Date.now() - t0) / 1000).toFixed(1)}s`,
+    );
     process.exitCode = alerts.length || a.errors ? 1 : 0;
   });
-
+  registerPerf(program, walk, readText);
 program.parse();
