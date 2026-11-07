@@ -1,0 +1,101 @@
+{
+    "project":  "flutter-samples",
+    "labels":  [
+                   {
+                       "id":  "b4fee58d1903",
+                       "rule":  "perf/sequential-await-in-loop",
+                       "file":  "animations/test/misc/animated_list_test.dart",
+                       "line":  110,
+                       "verdict":  "false",
+                       "note":  "widget test, order matters"
+                   },
+                   {
+                       "id":  "12cb40a32ebc",
+                       "rule":  "perf/sequential-await-in-loop",
+                       "file":  "animations/test/misc/card_swipe_test.dart",
+                       "line":  40,
+                       "verdict":  "false",
+                       "note":  "widget test, order matters"
+                   },
+                   {
+                       "id":  "5ed3913ddcc3",
+                       "rule":  "perf/sequential-await-in-loop",
+                       "file":  "date_planner/lib/event_list.dart",
+                       "line":  54,
+                       "verdict":  "false",
+                       "note":  "collection-for in a widget list, not an awaited loop (rule bug)"
+                   },
+                   {
+                       "id":  "43c26b6a390b",
+                       "rule":  "perf/sequential-await-in-loop",
+                       "file":  "testing_app/integration_test/perf_driver.dart",
+                       "line":  14,
+                       "verdict":  "unsure",
+                       "note":  "test driver, writes are independent but it is test tooling"
+                   },
+                   {
+                       "id":  "0ab13b4a996c",
+                       "rule":  "perf/sequential-await-in-loop",
+                       "file":  "testing_app/integration_test/perf_test.dart",
+                       "line":  61,
+                       "verdict":  "false",
+                       "note":  "widget test, order matters"
+                   },
+                   {
+                       "id":  "81a83345ba07",
+                       "rule":  "perf/sequential-await-in-loop",
+                       "file":  "testing_app/integration_test/perf_test.dart",
+                       "line":  82,
+                       "verdict":  "false",
+                       "note":  "widget test, order matters"
+                   },
+                   {
+                       "id":  "13e8315e7b8c",
+                       "rule":  "perf/sequential-await-in-loop",
+                       "file":  "tool/ci_script.dart",
+                       "line":  52,
+                       "verdict":  "false",
+                       "note":  "CI script, sequential on purpose"
+                   },
+                   {
+                       "id":  "865eee75c016",
+                       "rule":  "perf/sequential-await-in-loop",
+                       "file":  "tool/ci_with_channel.dart",
+                       "line":  54,
+                       "verdict":  "false",
+                       "note":  "steps depend on each other"
+                   },
+                   {
+                       "id":  "ff31bf73e030",
+                       "rule":  "perf/sequential-await-in-loop",
+                       "file":  "tool/ci_with_channel.dart",
+                       "line":  95,
+                       "verdict":  "false",
+                       "note":  "CI script, sequential on purpose"
+                   },
+                   {
+                       "id":  "e7ed34b67505",
+                       "rule":  "perf/sequential-await-in-loop",
+                       "file":  "tool/clean_all.dart",
+                       "line":  29,
+                       "verdict":  "false",
+                       "note":  "dev tool script"
+                   },
+                   {
+                       "id":  "9ca89118bc9c",
+                       "rule":  "perf/sequential-await-in-loop",
+                       "file":  "tool/release.dart",
+                       "line":  74,
+                       "verdict":  "false",
+                       "note":  "release script, sequential on purpose"
+                   },
+                   {
+                       "id":  "d9fb59151261",
+                       "rule":  "perf/sequential-await-in-loop",
+                       "file":  "tool/release.dart",
+                       "line":  210,
+                       "verdict":  "false",
+                       "note":  "ordered commands"
+                   }
+               ]
+}
