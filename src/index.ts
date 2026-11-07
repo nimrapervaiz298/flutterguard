@@ -3,6 +3,7 @@ import path from "node:path";
 import { analyzePenalty, printAnalyze, runAnalyze, tierOf } from "./analyzer";
 import type { AnalyzeResult } from "./analyzer";
 import { findBloat } from "./bloat";
+import { registerBench } from "./bench";
 import { registerPerf } from "./perf";
 import { registerReport } from "./report";
 import { readText, walk } from "./scanner";
@@ -120,5 +121,5 @@ program
 
 registerPerf(program, walk, readText);
 registerReport(program, { findSecrets, findBloat, runAnalyze, tierOf });
-
+registerBench(program);
 program.parse();
