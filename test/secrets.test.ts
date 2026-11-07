@@ -93,3 +93,31 @@ test("shouldScanFile picks source and config files only", () => {
   assert.equal(shouldScanFile("assets/logo.png"), false);
   assert.equal(shouldScanFile("pubspec.lock"), false);
 });
+
+test("does not flag a value equal to its key name", () => {
+  assert.deepEqual(scan(`password: 'PASSWORD'`), []);
+  assert.deepEqual(scan(`static const password = 'password';`), []);
+});
+
+test("does not flag obvious placeholder values", () => {
+  assert.deepEqual(scan(`secret: 'changeme'`), []);
+  assert.deepEqual(scan(`token = 'xxxxxxxx'`), []);
+  assert.deepEqual(scan(`apiKey: '12345678'`), []);
+});
+
+test("does not flag a generic secret inside test files", () => {
+  const line = `const password = "s3cretvalue99";`;
+  assert.deepEqual(scan(line, "test/auth_test.dart"), []);
+  assert.deepEqual(scan(line, "lib/auth_test.dart"), []);
+  assert.deepEqual(scan(line, "integration_test/login.dart"), []);
+});
+
+test("still flags a real Google key inside a test file", () => {
+  const hits = scan(`final k = '${GOOGLE}';`, "test/a_test.dart");
+  assert.equal(hits.length, 1);
+  assert.equal(hits[0].level, "ALERT");
+});
+
+test("known limitation: a value on the next line is not detected", () => {
+  assert.deepEqual(scan("static const token =\n    'a1b2c3d4e5f6a7b8';"), []);
+});
