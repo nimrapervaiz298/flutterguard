@@ -3,45 +3,14 @@ import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { registerPerf } from "./perf";
-
+import { registerReport } from "./report";
+import { readText, walk } from "./scanner";
 
 const LANGS: Record<string, string> = {
   ".dart": "Dart", ".js": "JavaScript", ".ts": "TypeScript",
   ".py": "Python", ".java": "Java", ".go": "Go",
   ".kt": "Kotlin", ".swift": "Swift",
 };
-const SKIP = new Set(["node_modules", ".git", "build", ".dart_tool", "dist"]);
-
-// ---------- file walking and reading (cached: each runs once per process) ----------
-function walkRaw(dir: string, out: string[] = []): string[] {
-  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
-    if (SKIP.has(e.name)) continue;
-    const p = path.join(dir, e.name);
-    if (e.isDirectory()) walkRaw(p, out);
-    else out.push(p);
-  }
-  return out;
-}
-
-const walkCache = new Map<string, string[]>();
-function walk(dir: string): string[] {
-  let r = walkCache.get(dir);
-  if (!r) {
-    r = walkRaw(dir);
-    walkCache.set(dir, r);
-  }
-  return r;
-}
-
-const textCache = new Map<string, string>();
-function readText(f: string): string {
-  let t = textCache.get(f);
-  if (t === undefined) {
-    t = fs.readFileSync(f, "utf8");
-    textCache.set(f, t);
-  }
-  return t;
-}
 
 // ---------- secrets ----------
 const PATTERNS: [string, RegExp][] = [
@@ -65,16 +34,15 @@ function findSecrets(dir: string): SecretHit[] {
   for (const f of walk(dir)) {
     const base = path.basename(f);
     if (!SCAN_EXT.has(path.extname(f)) && base !== ".env") continue;
-    if (fs.statSync(f).size > 1_000_000) continue;
     readText(f).split("\n").forEach((line, i) => {
       for (const [name, re] of PATTERNS) {
-        const m = line.match(re);
-        if (!m) continue;
+        if (!re.test(line)) continue;
         const isFirebase = FIREBASE_FILES.has(base) &&
           (name === "Google API key" || name === "Generic secret");
         hits.push({
           level: isFirebase ? "INFO" : "ALERT",
-          name, file: f, line: i + 1, preview: m[0].slice(0, 6) + "***",
+          name, file: f, line: i + 1,
+          preview: "[redacted]", // secret values are never printed
         });
         break; // one report per line
       }
@@ -265,7 +233,7 @@ program
   .option("--min <n>", "minimum method length in lines", "80")
   .action((dir: string, opts: { min: string }) => {
     const rows = findBloat(dir, Number(opts.min));
-    console.log(`${rows.length} long method(s) (${opts.min}+ lines)`);
+    console.log(`${rows.length} long method(s) (${opts.min}+ lines, estimated from braces)`);
     rows.slice(0, 10).forEach((r) => console.log(`${r.len} lines  ${r.file}:${r.line}  ${r.name}`));
   });
 
@@ -334,5 +302,8 @@ program
     );
     process.exitCode = alerts.length || a.errors ? 1 : 0;
   });
-  registerPerf(program, walk, readText);
+
+registerPerf(program, walk, readText);
+registerReport(program, { findSecrets, findBloat, runAnalyze, tierOf });
+
 program.parse();
