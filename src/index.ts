@@ -1,6 +1,7 @@
 import { Command } from "commander";
 import path from "node:path";
 import { printAnalyze, runAnalyze, tierOf } from "./analyzer";
+import { registerAccuracy } from "./accuracy";
 import { registerBench } from "./bench";
 import { findBloat } from "./bloat";
 import { registerPerf } from "./perf";
@@ -70,5 +71,6 @@ registerPerf(program, walk, readText);
 // "scan" is an alias of "report": one command, one summary, no health score.
 registerReport(program, { findSecrets, findBloat, runAnalyze, tierOf });
 registerBench(program);
+registerAccuracy(program, { findSecrets, findBloat, runAnalyze, tierOf });
 
 program.parse();

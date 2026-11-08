@@ -1,0 +1,8 @@
+[
+  { "name": "fyp",             "dir": "fyp-copy",                    "labels": "fyp.labels.json",             "tuned": true  },
+  { "name": "flutter-samples", "dir": "flutter-samples",             "labels": "flutter-samples.labels.json", "tuned": true  },
+  { "name": "chatdashboard",   "dir": "real-world/chatdashboard",    "labels": "chatdashboard.labels.json",   "tuned": false },
+  { "name": "easyshop",        "dir": "real-world/easyshop",         "labels": "easyshop.labels.json",        "tuned": false },
+  { "name": "collections",     "dir": "real-world/collections",      "labels": "collections.labels.json",     "tuned": false },
+  { "name": "tstore",          "dir": "real-world/tstore",           "labels": "tstore.labels.json",          "tuned": false }
+]

@@ -1,0 +1,198 @@
+{
+  "schemaVersion": 1,
+  "tool": {
+    "name": "flutterguard",
+    "version": "0.1.0"
+  },
+  "project": "C:\\Users\\Pervaz\\projects\\real-world\\chatdashboard",
+  "generatedAt": "2026-11-08T07:54:42.978Z",
+  "durationMs": 79,
+  "scan": {
+    "filesListed": 60,
+    "dirsSkipped": 1,
+    "symlinksSkipped": 0,
+    "unreadableDirs": 0,
+    "filesTooLarge": 0,
+    "filesUnreadable": 0,
+    "outsideBlocked": 0,
+    "maxFileBytes": 1024000
+  },
+  "summary": {
+    "total": 8,
+    "bySeverity": {
+      "critical": 0,
+      "high": 0,
+      "medium": 2,
+      "low": 4,
+      "info": 2
+    },
+    "byCategory": {
+      "security": 2,
+      "reliability": 0,
+      "performance": 2,
+      "maintainability": 4,
+      "style": 0
+    }
+  },
+  "checks": [
+    {
+      "name": "secrets",
+      "status": "ok",
+      "durationMs": 41
+    },
+    {
+      "name": "bloat",
+      "status": "ok",
+      "durationMs": 11
+    },
+    {
+      "name": "perf",
+      "status": "ok",
+      "durationMs": 4
+    },
+    {
+      "name": "analyze",
+      "status": "skipped",
+      "reason": "skipped (--no-analyze)",
+      "durationMs": 0
+    }
+  ],
+  "diagnostics": [
+    {
+      "schemaVersion": 1,
+      "id": "ff9a0d483450",
+      "rule": "perf/firestore-unbounded-read",
+      "category": "performance",
+      "severity": "medium",
+      "confidence": "medium",
+      "source": "static",
+      "message": "Reads a whole Firestore collection with no limit() or where()",
+      "location": {
+        "file": "lib/services/chat_service.dart",
+        "line": 53
+      },
+      "evidence": "collection: sessions",
+      "why": "Cost and load time grow with the size of the collection.",
+      "fix": "Add limit() or where(), or read once and cache the result."
+    },
+    {
+      "schemaVersion": 1,
+      "id": "2d5c5250bd82",
+      "rule": "perf/firestore-unbounded-read",
+      "category": "performance",
+      "severity": "medium",
+      "confidence": "medium",
+      "source": "static",
+      "message": "Reads a whole Firestore collection with no limit() or where()",
+      "location": {
+        "file": "lib/services/chat_service.dart",
+        "line": 65
+      },
+      "evidence": "collection: messages",
+      "why": "Cost and load time grow with the size of the collection.",
+      "fix": "Add limit() or where(), or read once and cache the result."
+    },
+    {
+      "schemaVersion": 1,
+      "id": "6a81b8ec8339",
+      "rule": "bloat/long-method",
+      "category": "maintainability",
+      "severity": "low",
+      "confidence": "medium",
+      "source": "static",
+      "message": "Long method (91 lines, estimated)",
+      "location": {
+        "file": "lib/views/customer_portal.dart",
+        "line": 226
+      },
+      "evidence": "91 lines: Widget _buildMessagesPane(String currentUserId, bo",
+      "why": "Very long methods are hard to read and test. In Flutter, a long build() rebuilds everything inside it on every setState.",
+      "fix": "Split it into smaller widgets or methods."
+    },
+    {
+      "schemaVersion": 1,
+      "id": "34e43aef1e0c",
+      "rule": "bloat/long-method",
+      "category": "maintainability",
+      "severity": "low",
+      "confidence": "medium",
+      "source": "static",
+      "message": "Long method (118 lines, estimated)",
+      "location": {
+        "file": "lib/views/customer_portal.dart",
+        "line": 362
+      },
+      "evidence": "118 lines: Widget build(BuildContext context) {",
+      "why": "Very long methods are hard to read and test. In Flutter, a long build() rebuilds everything inside it on every setState.",
+      "fix": "Split it into smaller widgets or methods."
+    },
+    {
+      "schemaVersion": 1,
+      "id": "fb0aab461cbf",
+      "rule": "bloat/long-method",
+      "category": "maintainability",
+      "severity": "low",
+      "confidence": "medium",
+      "source": "static",
+      "message": "Long method (98 lines, estimated)",
+      "location": {
+        "file": "lib/views/login_view.dart",
+        "line": 108
+      },
+      "evidence": "98 lines: Widget build(BuildContext context) {",
+      "why": "Very long methods are hard to read and test. In Flutter, a long build() rebuilds everything inside it on every setState.",
+      "fix": "Split it into smaller widgets or methods."
+    },
+    {
+      "schemaVersion": 1,
+      "id": "89d6e0de6361",
+      "rule": "bloat/long-method",
+      "category": "maintainability",
+      "severity": "low",
+      "confidence": "medium",
+      "source": "static",
+      "message": "Long method (177 lines, estimated)",
+      "location": {
+        "file": "lib/views/user_settings_view.dart",
+        "line": 105
+      },
+      "evidence": "177 lines: Widget build(BuildContext context) {",
+      "why": "Very long methods are hard to read and test. In Flutter, a long build() rebuilds everything inside it on every setState.",
+      "fix": "Split it into smaller widgets or methods."
+    },
+    {
+      "schemaVersion": 1,
+      "id": "b43eefcc4a4c",
+      "rule": "secrets/firebase-config-key",
+      "category": "security",
+      "severity": "info",
+      "confidence": "high",
+      "source": "static",
+      "message": "Firebase client config key found (Generic secret)",
+      "location": {
+        "file": "lib/firebase_options.dart",
+        "line": 65
+      },
+      "evidence": "pattern: Generic secret",
+      "why": "Firebase client keys identify your project. They are not secrets by themselves; real protection comes from Firestore/Storage security rules and API key restrictions.",
+      "fix": "Check your security rules and restrict the key in the Google Cloud console."
+    },
+    {
+      "schemaVersion": 1,
+      "id": "1d59a2663c53",
+      "rule": "secrets/firebase-config-key",
+      "category": "security",
+      "severity": "info",
+      "confidence": "high",
+      "source": "static",
+      "message": "Firebase client config key found (Generic secret)",
+      "location": {
+        "file": "lib/firebase_options.dart",
+        "line": 75
+      },
+      "evidence": "pattern: Generic secret",
+      "why": "Firebase client keys identify your project. They are not secrets by themselves; real protection comes from Firestore/Storage security rules and API key restrictions.",
+      "fix": "Check your security rules and restrict the key in the Google Cloud console."
+    }
+  ]
+}

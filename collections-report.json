@@ -1,0 +1,503 @@
+{
+  "schemaVersion": 1,
+  "tool": {
+    "name": "flutterguard",
+    "version": "0.1.0"
+  },
+  "project": "C:\\Users\\Pervaz\\projects\\real-world\\collections",
+  "generatedAt": "2026-11-08T12:46:37.219Z",
+  "durationMs": 162,
+  "scan": {
+    "filesListed": 175,
+    "dirsSkipped": 1,
+    "symlinksSkipped": 0,
+    "unreadableDirs": 0,
+    "filesTooLarge": 0,
+    "filesUnreadable": 0,
+    "outsideBlocked": 0,
+    "maxFileBytes": 1024000
+  },
+  "summary": {
+    "total": 26,
+    "bySeverity": {
+      "critical": 0,
+      "high": 0,
+      "medium": 9,
+      "low": 17,
+      "info": 0
+    },
+    "byCategory": {
+      "security": 0,
+      "reliability": 0,
+      "performance": 6,
+      "maintainability": 20,
+      "style": 0
+    }
+  },
+  "checks": [
+    {
+      "name": "secrets",
+      "status": "ok",
+      "durationMs": 99
+    },
+    {
+      "name": "bloat",
+      "status": "ok",
+      "durationMs": 18
+    },
+    {
+      "name": "perf",
+      "status": "ok",
+      "durationMs": 7
+    },
+    {
+      "name": "analyze",
+      "status": "skipped",
+      "reason": "skipped (--no-analyze)",
+      "durationMs": 0
+    }
+  ],
+  "diagnostics": [
+    {
+      "schemaVersion": 1,
+      "id": "044d0fc6a98e",
+      "rule": "perf/firestore-unbounded-read",
+      "category": "performance",
+      "severity": "medium",
+      "confidence": "medium",
+      "source": "static",
+      "message": "Reads a whole Firestore collection with no limit() or where()",
+      "location": {
+        "file": "lib/address_provider.dart",
+        "line": 21
+      },
+      "evidence": "collection: addresses",
+      "why": "Cost and load time grow with the size of the collection.",
+      "fix": "Add limit() or where(), or read once and cache the result."
+    },
+    {
+      "schemaVersion": 1,
+      "id": "210075a5cf71",
+      "rule": "bloat/long-method",
+      "category": "maintainability",
+      "severity": "medium",
+      "confidence": "medium",
+      "source": "static",
+      "message": "Long method (251 lines, estimated)",
+      "location": {
+        "file": "lib/cart_page.dart",
+        "line": 16
+      },
+      "evidence": "251 lines: Widget build(BuildContext context) {",
+      "why": "Very long methods are hard to read and test. In Flutter, a long build() rebuilds everything inside it on every setState.",
+      "fix": "Split it into smaller widgets or methods."
+    },
+    {
+      "schemaVersion": 1,
+      "id": "9969123a31b6",
+      "rule": "perf/firestore-unbounded-read",
+      "category": "performance",
+      "severity": "medium",
+      "confidence": "medium",
+      "source": "static",
+      "message": "Reads a whole Firestore collection with no limit() or where()",
+      "location": {
+        "file": "lib/cart_provider.dart",
+        "line": 32
+      },
+      "evidence": "collection: cart",
+      "why": "Cost and load time grow with the size of the collection.",
+      "fix": "Add limit() or where(), or read once and cache the result."
+    },
+    {
+      "schemaVersion": 1,
+      "id": "b712581e4de3",
+      "rule": "perf/firestore-unbounded-read",
+      "category": "performance",
+      "severity": "medium",
+      "confidence": "medium",
+      "source": "static",
+      "message": "Reads a whole Firestore collection with no limit() or where()",
+      "location": {
+        "file": "lib/cart_provider.dart",
+        "line": 61
+      },
+      "evidence": "collection: orders",
+      "why": "Cost and load time grow with the size of the collection.",
+      "fix": "Add limit() or where(), or read once and cache the result."
+    },
+    {
+      "schemaVersion": 1,
+      "id": "6f14e32e058f",
+      "rule": "perf/firestore-unbounded-read",
+      "category": "performance",
+      "severity": "medium",
+      "confidence": "medium",
+      "source": "static",
+      "message": "Reads a whole Firestore collection with no limit() or where()",
+      "location": {
+        "file": "lib/cart_provider.dart",
+        "line": 166
+      },
+      "evidence": "collection: cart",
+      "why": "Cost and load time grow with the size of the collection.",
+      "fix": "Add limit() or where(), or read once and cache the result."
+    },
+    {
+      "schemaVersion": 1,
+      "id": "917df31a961a",
+      "rule": "perf/firestore-unbounded-read",
+      "category": "performance",
+      "severity": "medium",
+      "confidence": "medium",
+      "source": "static",
+      "message": "Reads a whole Firestore collection with no limit() or where()",
+      "location": {
+        "file": "lib/cart_provider.dart",
+        "line": 207
+      },
+      "evidence": "collection: cart",
+      "why": "Cost and load time grow with the size of the collection.",
+      "fix": "Add limit() or where(), or read once and cache the result."
+    },
+    {
+      "schemaVersion": 1,
+      "id": "24e52835229b",
+      "rule": "bloat/long-method",
+      "category": "maintainability",
+      "severity": "medium",
+      "confidence": "medium",
+      "source": "static",
+      "message": "Long method (211 lines, estimated)",
+      "location": {
+        "file": "lib/order_history_page.dart",
+        "line": 18
+      },
+      "evidence": "211 lines: Widget build(BuildContext context) {",
+      "why": "Very long methods are hard to read and test. In Flutter, a long build() rebuilds everything inside it on every setState.",
+      "fix": "Split it into smaller widgets or methods."
+    },
+    {
+      "schemaVersion": 1,
+      "id": "48ce0c367666",
+      "rule": "bloat/long-method",
+      "category": "maintainability",
+      "severity": "medium",
+      "confidence": "medium",
+      "source": "static",
+      "message": "Long method (221 lines, estimated)",
+      "location": {
+        "file": "lib/payment_methods_screen.dart",
+        "line": 253
+      },
+      "evidence": "221 lines: ) {",
+      "why": "Very long methods are hard to read and test. In Flutter, a long build() rebuilds everything inside it on every setState.",
+      "fix": "Split it into smaller widgets or methods."
+    },
+    {
+      "schemaVersion": 1,
+      "id": "c9515a99bdff",
+      "rule": "bloat/long-method",
+      "category": "maintainability",
+      "severity": "medium",
+      "confidence": "medium",
+      "source": "static",
+      "message": "Long method (292 lines, estimated)",
+      "location": {
+        "file": "lib/payment_screen.dart",
+        "line": 91
+      },
+      "evidence": "292 lines: Widget build(BuildContext context) {",
+      "why": "Very long methods are hard to read and test. In Flutter, a long build() rebuilds everything inside it on every setState.",
+      "fix": "Split it into smaller widgets or methods."
+    },
+    {
+      "schemaVersion": 1,
+      "id": "fc00edf6d961",
+      "rule": "bloat/long-method",
+      "category": "maintainability",
+      "severity": "low",
+      "confidence": "medium",
+      "source": "static",
+      "message": "Long method (136 lines, estimated)",
+      "location": {
+        "file": "lib/address_form.dart",
+        "line": 106
+      },
+      "evidence": "136 lines: Widget build(BuildContext context) {",
+      "why": "Very long methods are hard to read and test. In Flutter, a long build() rebuilds everything inside it on every setState.",
+      "fix": "Split it into smaller widgets or methods."
+    },
+    {
+      "schemaVersion": 1,
+      "id": "2f789efc0f26",
+      "rule": "bloat/long-method",
+      "category": "maintainability",
+      "severity": "low",
+      "confidence": "medium",
+      "source": "static",
+      "message": "Long method (174 lines, estimated)",
+      "location": {
+        "file": "lib/address_screen.dart",
+        "line": 56
+      },
+      "evidence": "174 lines: Widget build(BuildContext context) {",
+      "why": "Very long methods are hard to read and test. In Flutter, a long build() rebuilds everything inside it on every setState.",
+      "fix": "Split it into smaller widgets or methods."
+    },
+    {
+      "schemaVersion": 1,
+      "id": "0aacb4f8b550",
+      "rule": "bloat/long-method",
+      "category": "maintainability",
+      "severity": "low",
+      "confidence": "medium",
+      "source": "static",
+      "message": "Long method (127 lines, estimated)",
+      "location": {
+        "file": "lib/app_drawer.dart",
+        "line": 18
+      },
+      "evidence": "127 lines: Widget build(BuildContext context) {",
+      "why": "Very long methods are hard to read and test. In Flutter, a long build() rebuilds everything inside it on every setState.",
+      "fix": "Split it into smaller widgets or methods."
+    },
+    {
+      "schemaVersion": 1,
+      "id": "a629698c06d2",
+      "rule": "bloat/long-method",
+      "category": "maintainability",
+      "severity": "low",
+      "confidence": "medium",
+      "source": "static",
+      "message": "Long method (88 lines, estimated)",
+      "location": {
+        "file": "lib/auth_wrapper.dart",
+        "line": 75
+      },
+      "evidence": "88 lines: Widget build(BuildContext context) {",
+      "why": "Very long methods are hard to read and test. In Flutter, a long build() rebuilds everything inside it on every setState.",
+      "fix": "Split it into smaller widgets or methods."
+    },
+    {
+      "schemaVersion": 1,
+      "id": "46111d2d50d7",
+      "rule": "perf/sequential-await-in-loop",
+      "category": "performance",
+      "severity": "low",
+      "confidence": "low",
+      "source": "static",
+      "message": "await inside a loop runs iterations one after another",
+      "location": {
+        "file": "lib/cart_provider.dart",
+        "line": 226
+      },
+      "why": "If the iterations are independent, running them together is faster.",
+      "fix": "Consider Future.wait() when iterations do not depend on each other."
+    },
+    {
+      "schemaVersion": 1,
+      "id": "4e0dc9062ceb",
+      "rule": "bloat/long-method",
+      "category": "maintainability",
+      "severity": "low",
+      "confidence": "medium",
+      "source": "static",
+      "message": "Long method (133 lines, estimated)",
+      "location": {
+        "file": "lib/checkout_screen.dart",
+        "line": 11
+      },
+      "evidence": "133 lines: Widget build(BuildContext context) {",
+      "why": "Very long methods are hard to read and test. In Flutter, a long build() rebuilds everything inside it on every setState.",
+      "fix": "Split it into smaller widgets or methods."
+    },
+    {
+      "schemaVersion": 1,
+      "id": "9695fb6a4b19",
+      "rule": "bloat/long-method",
+      "category": "maintainability",
+      "severity": "low",
+      "confidence": "medium",
+      "source": "static",
+      "message": "Long method (133 lines, estimated)",
+      "location": {
+        "file": "lib/home_page.dart",
+        "line": 59
+      },
+      "evidence": "133 lines: Widget build(BuildContext context) {",
+      "why": "Very long methods are hard to read and test. In Flutter, a long build() rebuilds everything inside it on every setState.",
+      "fix": "Split it into smaller widgets or methods."
+    },
+    {
+      "schemaVersion": 1,
+      "id": "86343824efef",
+      "rule": "bloat/long-method",
+      "category": "maintainability",
+      "severity": "low",
+      "confidence": "medium",
+      "source": "static",
+      "message": "Long method (113 lines, estimated)",
+      "location": {
+        "file": "lib/login_screen.dart",
+        "line": 99
+      },
+      "evidence": "113 lines: Widget build(BuildContext context) {",
+      "why": "Very long methods are hard to read and test. In Flutter, a long build() rebuilds everything inside it on every setState.",
+      "fix": "Split it into smaller widgets or methods."
+    },
+    {
+      "schemaVersion": 1,
+      "id": "f44dc97548fd",
+      "rule": "bloat/long-method",
+      "category": "maintainability",
+      "severity": "low",
+      "confidence": "medium",
+      "source": "static",
+      "message": "Long method (189 lines, estimated)",
+      "location": {
+        "file": "lib/order_details_page.dart",
+        "line": 12
+      },
+      "evidence": "189 lines: Widget build(BuildContext context) {",
+      "why": "Very long methods are hard to read and test. In Flutter, a long build() rebuilds everything inside it on every setState.",
+      "fix": "Split it into smaller widgets or methods."
+    },
+    {
+      "schemaVersion": 1,
+      "id": "04ed0bae3cb4",
+      "rule": "bloat/long-method",
+      "category": "maintainability",
+      "severity": "low",
+      "confidence": "medium",
+      "source": "static",
+      "message": "Long method (107 lines, estimated)",
+      "location": {
+        "file": "lib/order_details_screen.dart",
+        "line": 47
+      },
+      "evidence": "107 lines: Widget build(BuildContext context) {",
+      "why": "Very long methods are hard to read and test. In Flutter, a long build() rebuilds everything inside it on every setState.",
+      "fix": "Split it into smaller widgets or methods."
+    },
+    {
+      "schemaVersion": 1,
+      "id": "3def118ab29f",
+      "rule": "bloat/long-method",
+      "category": "maintainability",
+      "severity": "low",
+      "confidence": "medium",
+      "source": "static",
+      "message": "Long method (96 lines, estimated)",
+      "location": {
+        "file": "lib/order_history_screen.dart",
+        "line": 19
+      },
+      "evidence": "96 lines: Widget build(BuildContext context) {",
+      "why": "Very long methods are hard to read and test. In Flutter, a long build() rebuilds everything inside it on every setState.",
+      "fix": "Split it into smaller widgets or methods."
+    },
+    {
+      "schemaVersion": 1,
+      "id": "5a482a1256e7",
+      "rule": "bloat/long-method",
+      "category": "maintainability",
+      "severity": "low",
+      "confidence": "medium",
+      "source": "static",
+      "message": "Long method (82 lines, estimated)",
+      "location": {
+        "file": "lib/payment_methods_screen.dart",
+        "line": 23
+      },
+      "evidence": "82 lines: Widget build(BuildContext context) {",
+      "why": "Very long methods are hard to read and test. In Flutter, a long build() rebuilds everything inside it on every setState.",
+      "fix": "Split it into smaller widgets or methods."
+    },
+    {
+      "schemaVersion": 1,
+      "id": "c4849cae4b14",
+      "rule": "bloat/long-method",
+      "category": "maintainability",
+      "severity": "low",
+      "confidence": "medium",
+      "source": "static",
+      "message": "Long method (117 lines, estimated)",
+      "location": {
+        "file": "lib/payment_methods_screen.dart",
+        "line": 131
+      },
+      "evidence": "117 lines: void _showAddUpiSheet(BuildContext context, Paymen",
+      "why": "Very long methods are hard to read and test. In Flutter, a long build() rebuilds everything inside it on every setState.",
+      "fix": "Split it into smaller widgets or methods."
+    },
+    {
+      "schemaVersion": 1,
+      "id": "35e2b2dbbfe7",
+      "rule": "bloat/long-method",
+      "category": "maintainability",
+      "severity": "low",
+      "confidence": "medium",
+      "source": "static",
+      "message": "Long method (195 lines, estimated)",
+      "location": {
+        "file": "lib/payment_methods_screen.dart",
+        "line": 476
+      },
+      "evidence": "195 lines: void _showTopUpSheet(BuildContext context, Payment",
+      "why": "Very long methods are hard to read and test. In Flutter, a long build() rebuilds everything inside it on every setState.",
+      "fix": "Split it into smaller widgets or methods."
+    },
+    {
+      "schemaVersion": 1,
+      "id": "7e953a47b8cd",
+      "rule": "bloat/long-method",
+      "category": "maintainability",
+      "severity": "low",
+      "confidence": "medium",
+      "source": "static",
+      "message": "Long method (185 lines, estimated)",
+      "location": {
+        "file": "lib/product_details_page.dart",
+        "line": 20
+      },
+      "evidence": "185 lines: Widget build(BuildContext context) {",
+      "why": "Very long methods are hard to read and test. In Flutter, a long build() rebuilds everything inside it on every setState.",
+      "fix": "Split it into smaller widgets or methods."
+    },
+    {
+      "schemaVersion": 1,
+      "id": "38a7d903ac52",
+      "rule": "bloat/long-method",
+      "category": "maintainability",
+      "severity": "low",
+      "confidence": "medium",
+      "source": "static",
+      "message": "Long method (97 lines, estimated)",
+      "location": {
+        "file": "lib/signup_screen.dart",
+        "line": 107
+      },
+      "evidence": "97 lines: Widget build(BuildContext context) {",
+      "why": "Very long methods are hard to read and test. In Flutter, a long build() rebuilds everything inside it on every setState.",
+      "fix": "Split it into smaller widgets or methods."
+    },
+    {
+      "schemaVersion": 1,
+      "id": "ce2d218852ee",
+      "rule": "bloat/long-method",
+      "category": "maintainability",
+      "severity": "low",
+      "confidence": "medium",
+      "source": "static",
+      "message": "Long method (87 lines, estimated)",
+      "location": {
+        "file": "lib/success_screen.dart",
+        "line": 7
+      },
+      "evidence": "87 lines: Widget build(BuildContext context) {",
+      "why": "Very long methods are hard to read and test. In Flutter, a long build() rebuilds everything inside it on every setState.",
+      "fix": "Split it into smaller widgets or methods."
+    }
+  ]
+}

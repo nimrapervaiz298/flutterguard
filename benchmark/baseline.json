@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "rules": {
+    "perf/firestore-unbounded-read": {
+      "tp": 6,
+      "fp": 6,
+      "unsure": 2
+    },
+    "perf/sequential-await-in-loop": {
+      "tp": 1,
+      "fp": 0,
+      "unsure": 2
+    }
+  }
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "project": "easyshop",
+    "file": "lib/repositories/cloud_functions.dart",
+    "description": "forEach with an async closure: awaiting forEach does not wait for the deletes",
+    "rule": null
+  },
+  {
+    "project": "collections",
+    "file": "lib/cart_provider.dart",
+    "description": "reads the whole cart but always updates the first document (unconfirmed, looks like a bug)",
+    "rule": null
+  }
+]
