@@ -2,7 +2,7 @@ import type { Command } from "commander";
 import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
-import { findPerfInText } from "./perf";
+import { findPerfInText, shouldCheckPerf } from "./perf";
 import { configureScanner, getScanner, readText, walk } from "./scanner";
 
 export const SCHEMA_VERSION = 1;
@@ -28,10 +28,13 @@ export interface Diagnostic {
   fix?: string;
 }
 
+/** ok = ran. skipped = not run on purpose or not applicable. failed = should have run but could not. */
+export type CheckState = "ok" | "skipped" | "failed";
+
 export interface CheckStatus {
   name: string;
-  ran: boolean;
-  skippedReason?: string;
+  status: CheckState;
+  reason?: string;
   durationMs: number;
 }
 
@@ -84,6 +87,18 @@ export function makeDiagnostic(input: DiagnosticInput): Diagnostic {
   return { schemaVersion: 1, id: sha(key), ...d };
 }
 
+/**
+ * Exit code policy:
+ *   0 = every requested check ran and there are no high or critical findings
+ *   1 = high or critical findings
+ *   2 = a check (or the tool itself) failed, so the report is incomplete
+ */
+export function exitCodeFor(report: Report): number {
+  if (report.checks.some((c) => c.status === "failed")) return 2;
+  const blocking = report.summary.bySeverity.critical + report.summary.bySeverity.high;
+  return blocking > 0 ? 1 : 0;
+}
+
 // ---------- shapes of the existing checks ----------
 export interface SecretHitLike {
   level: "ALERT" | "INFO";
@@ -99,7 +114,12 @@ export interface AnalyzeIssueLike {
   loc: string;
   rule: string;
 }
-export interface AnalyzeResultLike { ran: boolean; reason: string; issues: AnalyzeIssueLike[] }
+export interface AnalyzeResultLike {
+  ran: boolean;
+  failed?: boolean;
+  reason: string;
+  issues: AnalyzeIssueLike[];
+}
 
 // ---------- adapters: old shapes -> Diagnostic ----------
 export function fromSecret(h: SecretHitLike, projectDir: string): Diagnostic {
@@ -228,6 +248,21 @@ export function fromPerf(
       fix: "Add limit() or where(), or read once and cache the result.",
     });
   }
+  if (f.rule === "firestore-query-without-limit") {
+    return makeDiagnostic({
+      rule: "perf/firestore-query-without-limit",
+      category: "performance",
+      severity: "low",
+      confidence: "low", // many where() queries legitimately return only a few documents
+      source: "static",
+      message: "Firestore query has where() but no limit()",
+      location,
+      evidence: f.collection ? `collection: ${f.collection}` : undefined,
+      anchor: f.collection ?? "unknown-collection",
+      why: "where() filters documents but does not cap how many come back. If many documents can match, cost and load time grow.",
+      fix: "Add limit() if the screen only needs the first N results, or paginate.",
+    });
+  }
   return makeDiagnostic({
     rule: "perf/sequential-await-in-loop",
     category: "performance",
@@ -262,10 +297,15 @@ export function buildReport(
   const diagnostics: Diagnostic[] = [];
   const checks: CheckStatus[] = [];
 
+  // A check that throws is recorded as failed; the other checks still run.
   const timed = (name: string, fn: () => void) => {
     const s = Date.now();
-    fn();
-    checks.push({ name, ran: true, durationMs: Date.now() - s });
+    try {
+      fn();
+      checks.push({ name, status: "ok", durationMs: Date.now() - s });
+    } catch (e) {
+      checks.push({ name, status: "failed", reason: (e as Error).message, durationMs: Date.now() - s });
+    }
   };
 
   timed("secrets", () => {
@@ -276,8 +316,7 @@ export function buildReport(
   });
   timed("perf", () => {
     for (const file of walk(dir)) {
-      if (path.extname(file) !== ".dart") continue;
-      if (/\.(g|freezed)\.dart$/.test(file)) continue;
+      if (!shouldCheckPerf(file, dir)) continue;
       for (const f of findPerfInText(readText(file))) {
         diagnostics.push(fromPerf(f, file, dir));
       }
@@ -286,15 +325,24 @@ export function buildReport(
 
   if (opts.analyze) {
     const s = Date.now();
-    const a = deps.runAnalyze(dir);
-    if (a.ran) {
-      a.issues.forEach((i) => diagnostics.push(fromAnalyzer(i, deps.tierOf(i))));
-      checks.push({ name: "analyze", ran: true, durationMs: Date.now() - s });
-    } else {
-      checks.push({ name: "analyze", ran: false, skippedReason: a.reason, durationMs: Date.now() - s });
+    try {
+      const a = deps.runAnalyze(dir);
+      if (a.ran) {
+        a.issues.forEach((i) => diagnostics.push(fromAnalyzer(i, deps.tierOf(i))));
+        checks.push({ name: "analyze", status: "ok", durationMs: Date.now() - s });
+      } else {
+        checks.push({
+          name: "analyze",
+          status: a.failed ? "failed" : "skipped",
+          reason: a.reason,
+          durationMs: Date.now() - s,
+        });
+      }
+    } catch (e) {
+      checks.push({ name: "analyze", status: "failed", reason: (e as Error).message, durationMs: Date.now() - s });
     }
   } else {
-    checks.push({ name: "analyze", ran: false, skippedReason: "skipped (--no-analyze)", durationMs: 0 });
+    checks.push({ name: "analyze", status: "skipped", reason: "skipped (--no-analyze)", durationMs: 0 });
   }
 
   // Same finding twice in one file: keep the first id, give later ones a numbered id.
@@ -342,6 +390,7 @@ export function buildReport(
 export function registerReport(program: Command, deps: ReportDeps): void {
   program
     .command("report <dir>")
+    .description("run all checks and print a report. Exit code: 0 clean, 1 high/critical findings, 2 a check or the tool failed")
     .option("--no-analyze", "skip flutter analyze (faster)")
     .option("--json", "print the full report as JSON")
     .option("--out <file>", "write the JSON report to a file")
@@ -373,8 +422,11 @@ export function registerReport(program: Command, deps: ReportDeps): void {
           console.log("By severity: " + SEVERITY_ORDER.map((k) => `${k} ${s.bySeverity[k]}`).join(", "));
           console.log("By category: " + CATEGORIES.map((k) => `${k} ${s.byCategory[k]}`).join(", "));
           report.checks
-            .filter((c) => !c.ran)
-            .forEach((c) => console.log(`Check skipped: ${c.name} (${c.skippedReason})`));
+            .filter((c) => c.status === "failed")
+            .forEach((c) => console.log(`Check FAILED: ${c.name} (${c.reason}). This report is incomplete.`));
+          report.checks
+            .filter((c) => c.status === "skipped")
+            .forEach((c) => console.log(`Check skipped: ${c.name} (${c.reason})`));
 
           const top = report.diagnostics
             .filter((d) => d.severity !== "info" && d.severity !== "low")
@@ -388,11 +440,13 @@ export function registerReport(program: Command, deps: ReportDeps): void {
           }
         }
 
-        const blocking = report.summary.bySeverity.critical + report.summary.bySeverity.high;
-        process.exitCode = blocking ? 1 : 0;
+        process.exitCode = exitCodeFor(report);
+        if (!opts.json) {
+          console.log(`\nExit code ${process.exitCode} (0 clean, 1 high/critical findings, 2 a check failed)`);
+        }
       } catch (e) {
         console.error(`Error: ${(e as Error).message}`);
-        process.exitCode = 2; // 2 = the tool itself failed, not a finding
+        process.exitCode = 2; // the tool itself failed, not a finding
       }
     });
 }

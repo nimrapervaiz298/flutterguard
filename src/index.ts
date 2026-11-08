@@ -2,8 +2,8 @@ import { Command } from "commander";
 import path from "node:path";
 import { analyzePenalty, printAnalyze, runAnalyze, tierOf } from "./analyzer";
 import type { AnalyzeResult } from "./analyzer";
-import { findBloat } from "./bloat";
 import { registerBench } from "./bench";
+import { findBloat } from "./bloat";
 import { registerPerf } from "./perf";
 import { registerReport } from "./report";
 import { readText, walk } from "./scanner";
@@ -58,7 +58,8 @@ program.command("analyze <dir>").action((dir: string) => {
   const t0 = Date.now();
   const a = runAnalyze(dir);
   if (!a.ran) {
-    console.log(`Skipped: ${a.reason}`);
+    console.log(`${a.failed ? "Check FAILED" : "Skipped"}: ${a.reason}`);
+    process.exitCode = a.failed ? 2 : 0;
     return;
   }
   printAnalyze(a);
@@ -98,7 +99,7 @@ program
     console.log(`Secrets : ${alerts.length} ALERT, ${infos} INFO (Firebase config)  [-${secretPenalty}]`);
     console.log(`Bloat   : ${rows.length} long methods (80+ lines), ${huge} very long (200+)  [-${bloatPenalty}]`);
     if (a.ran) console.log(`Analyze : ${a.errors} errors, ${a.warnings} warnings, ${a.infos} infos  [-${aPenalty}]`);
-    else console.log(`Analyze : skipped (${a.reason})`);
+    else console.log(`Analyze : ${a.failed ? "FAILED" : "skipped"} (${a.reason})`);
 
     if (alerts.length) {
       console.log("\nSecrets:");
@@ -116,10 +117,11 @@ program
     console.log(
       `\nTiming: file checks ${filesMs}ms, analyze ${(analyzeMs / 1000).toFixed(1)}s, total ${((Date.now() - t0) / 1000).toFixed(1)}s`,
     );
-    process.exitCode = alerts.length || a.errors ? 1 : 0;
+    process.exitCode = a.failed ? 2 : alerts.length || a.errors ? 1 : 0;
   });
 
 registerPerf(program, walk, readText);
 registerReport(program, { findSecrets, findBloat, runAnalyze, tierOf });
 registerBench(program);
+
 program.parse();

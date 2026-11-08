@@ -6,6 +6,8 @@ export type Tier = "error" | "bug-risk" | "migration" | "cleanup" | "style";
 export type Issue = { kind: "error" | "warning" | "info"; message: string; loc: string; rule: string };
 export type AnalyzeResult = {
   ran: boolean;
+  /** Set when the check was supposed to run but could not (as opposed to "not applicable"). */
+  failed?: boolean;
   reason: string;
   errors: number;
   warnings: number;
@@ -77,13 +79,20 @@ export function parseAnalyzeOutput(out: string): Issue[] {
 
 export function runAnalyze(dir: string): AnalyzeResult {
   const res: AnalyzeResult = { ran: false, reason: "", errors: 0, warnings: 0, infos: 0, issues: [] };
+  const fail = (reason: string): AnalyzeResult => {
+    res.failed = true;
+    res.reason = reason;
+    return res;
+  };
+
+  // Not applicable: this is not a Flutter/Dart project, so there is nothing to run.
   if (!fs.existsSync(path.join(dir, "pubspec.yaml"))) {
     res.reason = "no pubspec.yaml (not a Flutter/Dart project)";
     return res;
   }
+  // From here on the check was supposed to run, so any problem is a failure, not a skip.
   if (!fs.existsSync(path.join(dir, ".dart_tool", "package_config.json"))) {
-    res.reason = "dependencies not installed - run `flutter pub get` in the project first";
-    return res;
+    return fail("dependencies not installed - run `flutter pub get` in the project first");
   }
   const bin = process.env.FLUTTER_BIN || "flutter";
   const r = spawnSync(`"${bin}" analyze --no-pub`, {
@@ -98,21 +107,17 @@ export function runAnalyze(dir: string): AnalyzeResult {
     console.log(`[debug] bin: ${bin}, exit: ${r.status}, error: ${r.error?.message ?? "none"}`);
   }
   if (r.error) {
-    res.reason = `could not run flutter: ${r.error.message}`;
-    return res;
+    return fail(`could not run flutter: ${r.error.message}`);
   }
   if (r.status === 9009 || r.status === 127) {
-    res.reason = "flutter command not found (set FLUTTER_BIN or add Flutter to PATH)";
-    return res;
+    return fail("flutter command not found (set FLUTTER_BIN or add Flutter to PATH)");
   }
   if (r.status !== 0 && r.status !== 1) {
-    res.reason = `flutter analyze failed (exit ${r.status}); run with FG_DEBUG=1 to see why`;
-    return res;
+    return fail(`flutter analyze failed (exit ${r.status}); run with FG_DEBUG=1 to see why`);
   }
   const issues = parseAnalyzeOutput(out);
   if (r.status === 1 && issues.length === 0) {
-    res.reason = "flutter analyze reported a problem but its output could not be read; run with FG_DEBUG=1";
-    return res;
+    return fail("flutter analyze reported a problem but its output could not be read; run with FG_DEBUG=1");
   }
   res.issues = issues;
   for (const i of issues) {
