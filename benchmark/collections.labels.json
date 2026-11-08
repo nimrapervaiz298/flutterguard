@@ -1,0 +1,53 @@
+{
+    "project":  "collections",
+    "labels":  [
+                   {
+                       "id":  "044d0fc6a98e",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/address_provider.dart",
+                       "line":  21,
+                       "verdict":  "false",
+                       "note":  "one user\u0027s addresses, small per-user list"
+                   },
+                   {
+                       "id":  "9969123a31b6",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/cart_provider.dart",
+                       "line":  32,
+                       "verdict":  "false",
+                       "note":  "one user\u0027s cart, small per-user list"
+                   },
+                   {
+                       "id":  "b712581e4de3",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/cart_provider.dart",
+                       "line":  61,
+                       "verdict":  "unsure",
+                       "note":  "one user\u0027s order history, grows over time but per user"
+                   },
+                   {
+                       "id":  "6f14e32e058f",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/cart_provider.dart",
+                       "line":  166,
+                       "verdict":  "true",
+                       "note":  "reads the whole cart then updates only the first doc (looks like a bug)"
+                   },
+                   {
+                       "id":  "917df31a961a",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/cart_provider.dart",
+                       "line":  207,
+                       "verdict":  "false",
+                       "note":  "checkout deletes every cart doc, so reading all is needed"
+                   },
+                   {
+                       "id":  "46111d2d50d7",
+                       "rule":  "perf/sequential-await-in-loop",
+                       "file":  "lib/cart_provider.dart",
+                       "line":  226,
+                       "verdict":  "unsure",
+                       "note":  "reorder loop; each addToCart changes local state, order may matter"
+                   }
+               ]
+}

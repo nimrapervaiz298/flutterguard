@@ -1,0 +1,37 @@
+{
+    "project":  "easyshop",
+    "labels":  [
+                   {
+                       "id":  "42c45323f595",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/repositories/cloud_functions.dart",
+                       "line":  46,
+                       "verdict":  "true",
+                       "note":  "all products of a category, grows with the catalog"
+                   },
+                   {
+                       "id":  "65889aa18686",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/repositories/cloud_functions.dart",
+                       "line":  71,
+                       "verdict":  "false",
+                       "note":  "one user\u0027s cart, naturally small"
+                   },
+                   {
+                       "id":  "33108cb456d4",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/repositories/cloud_functions.dart",
+                       "line":  85,
+                       "verdict":  "false",
+                       "note":  "one user\u0027s favourites, per-user list"
+                   },
+                   {
+                       "id":  "4d231fa6b7df",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/repositories/cloud_functions.dart",
+                       "line":  93,
+                       "verdict":  "false",
+                       "note":  "checkout must process every cart item"
+                   }
+               ]
+}

@@ -1,0 +1,21 @@
+{
+    "project":  "chatdashboard",
+    "labels":  [
+                   {
+                       "id":  "ff9a0d483450",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/services/chat_service.dart",
+                       "line":  53,
+                       "verdict":  "true",
+                       "note":  "admin loads all chat sessions, grows with customers"
+                   },
+                   {
+                       "id":  "2d5c5250bd82",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/services/chat_service.dart",
+                       "line":  65,
+                       "verdict":  "unsure",
+                       "note":  "all messages of one chat; common for chat apps but unbounded"
+                   }
+               ]
+}
