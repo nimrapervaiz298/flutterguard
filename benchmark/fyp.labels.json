@@ -1,45 +1,45 @@
 {
-  "project": "fyp",
-  "labels": [
-    {
-      "id": "b067afed1281",
-      "rule": "perf/firestore-unbounded-read",
-      "file": "lib/services/embedding_service.dart",
-      "line": 94,
-      "verdict": "unlabeled",
-      "note": ""
-    },
-    {
-      "id": "73595d6e91f9",
-      "rule": "perf/firestore-unbounded-read",
-      "file": "lib/services/embedding_service.dart",
-      "line": 141,
-      "verdict": "unlabeled",
-      "note": ""
-    },
-    {
-      "id": "dcc4b394acc9",
-      "rule": "perf/firestore-unbounded-read",
-      "file": "lib/services/recommendation_service.dart",
-      "line": 50,
-      "verdict": "unlabeled",
-      "note": ""
-    },
-    {
-      "id": "0cf3195ffa5d",
-      "rule": "perf/sequential-await-in-loop",
-      "file": "lib/screens/checkout/checkout_screen.dart",
-      "line": 457,
-      "verdict": "unlabeled",
-      "note": ""
-    },
-    {
-      "id": "0885d43220a7",
-      "rule": "perf/sequential-await-in-loop",
-      "file": "lib/services/recommendation_service.dart",
-      "line": 31,
-      "verdict": "unlabeled",
-      "note": ""
-    }
-  ]
+    "project":  "fyp",
+    "labels":  [
+                   {
+                       "id":  "b067afed1281",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/services/embedding_service.dart",
+                       "line":  94,
+                       "verdict":  "true",
+                       "note":  "whole collection downloaded on every search"
+                   },
+                   {
+                       "id":  "73595d6e91f9",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/services/embedding_service.dart",
+                       "line":  141,
+                       "verdict":  "true",
+                       "note":  "whole collection downloaded on every product page"
+                   },
+                   {
+                       "id":  "dcc4b394acc9",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/services/recommendation_service.dart",
+                       "line":  50,
+                       "verdict":  "true",
+                       "note":  "whole collection downloaded for recommendations"
+                   },
+                   {
+                       "id":  "0cf3195ffa5d",
+                       "rule":  "perf/sequential-await-in-loop",
+                       "file":  "lib/screens/checkout/checkout_screen.dart",
+                       "line":  457,
+                       "verdict":  "unsure",
+                       "note":  "per-item order writes, one by one; parallel is not obviously safe (partial failure)"
+                   },
+                   {
+                       "id":  "0885d43220a7",
+                       "rule":  "perf/sequential-await-in-loop",
+                       "file":  "lib/services/recommendation_service.dart",
+                       "line":  31,
+                       "verdict":  "true",
+                       "note":  "5 independent document reads, could run in parallel"
+                   }
+               ]
 }
