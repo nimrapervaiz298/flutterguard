@@ -99,6 +99,17 @@ export function exitCodeFor(report: Report): number {
   return blocking > 0 ? 1 : 0;
 }
 
+/** Same report with everything that changes between runs removed, so two runs print identical JSON. */
+export function stabilizeReport(report: Report): Report {
+  return {
+    ...report,
+    project: ".",
+    generatedAt: "1970-01-01T00:00:00.000Z",
+    durationMs: 0,
+    checks: report.checks.map((c) => ({ ...c, durationMs: 0 })),
+  };
+}
+
 // ---------- shapes of the existing checks ----------
 export interface SecretHitLike {
   level: "ALERT" | "INFO";
@@ -396,20 +407,22 @@ export function registerReport(program: Command, deps: ReportDeps): void {
     .option("--json", "print the full report as JSON")
     .option("--out <file>", "write the JSON report to a file")
     .option("--max-file-kb <n>", "skip files larger than this many KB", "1000")
-    .action((dir: string, opts: { analyze: boolean; json?: boolean; out?: string; maxFileKb: string }) => {
+    .option("--stable", "omit timestamps, timings and absolute paths so two runs print identical JSON")
+    .action((dir: string, opts: { analyze: boolean; json?: boolean; out?: string; maxFileKb: string; stable?: boolean }) => {
       try {
         const kb = Number(opts.maxFileKb);
         if (!Number.isFinite(kb) || kb <= 0) throw new Error("--max-file-kb must be a positive number");
         configureScanner({ maxFileBytes: Math.round(kb * 1024) });
 
         const report = buildReport(dir, deps, { analyze: opts.analyze });
+        const shown = opts.stable ? stabilizeReport(report) : report;
 
         if (opts.out) {
-          fs.writeFileSync(opts.out, JSON.stringify(report, null, 2));
+          fs.writeFileSync(opts.out, JSON.stringify(shown, null, 2));
           console.log(`Report written to ${opts.out}`);
         }
         if (opts.json) {
-          console.log(JSON.stringify(report, null, 2));
+          console.log(JSON.stringify(shown, null, 2));
         } else {
           const s = report.summary;
           const sc = report.scan;

@@ -33,3 +33,20 @@ test("a Flutter project without installed packages is a failed check", () => {
     fs.rmSync(dir, { recursive: true, force: true });
   }
 });
+test("a FLUTTER_BIN path that does not exist is a failed check with a clear reason", () => {
+  const dir = tmp();
+  const saved = process.env.FLUTTER_BIN;
+  try {
+    fs.writeFileSync(path.join(dir, "pubspec.yaml"), "name: x\n");
+    fs.mkdirSync(path.join(dir, ".dart_tool"));
+    fs.writeFileSync(path.join(dir, ".dart_tool", "package_config.json"), "{}");
+    process.env.FLUTTER_BIN = path.join(dir, "no-such", "flutter.bat");
+    const r = runAnalyze(dir);
+    assert.equal(r.failed, true);
+    assert.match(r.reason, /FLUTTER_BIN/);
+  } finally {
+    if (saved === undefined) delete process.env.FLUTTER_BIN;
+    else process.env.FLUTTER_BIN = saved;
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});

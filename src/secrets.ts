@@ -80,7 +80,7 @@ export function findSecrets(dir: string): SecretHit[] {
   const hits: SecretHit[] = [];
   for (const f of walk(dir)) {
     if (!shouldScanFile(f)) continue;
-    for (const h of findSecretsInText(readText(f), f)) {
+    for (const h of findSecretsInText(readText(f), path.relative(dir, f))) {
       hits.push({ ...h, file: f, preview: "[redacted]" });
     }
   }
