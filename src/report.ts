@@ -390,6 +390,7 @@ export function buildReport(
 export function registerReport(program: Command, deps: ReportDeps): void {
   program
     .command("report <dir>")
+    .alias("scan")
     .description("run all checks and print a report. Exit code: 0 clean, 1 high/critical findings, 2 a check or the tool failed")
     .option("--no-analyze", "skip flutter analyze (faster)")
     .option("--json", "print the full report as JSON")

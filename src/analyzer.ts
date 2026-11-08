@@ -40,12 +40,6 @@ export function countTiers(issues: Issue[]): Record<Tier, number> {
   return t;
 }
 
-export function analyzePenalty(a: AnalyzeResult): number {
-  if (!a.ran) return 0;
-  const t = countTiers(a.issues);
-  return Math.min(30, t.error * 5 + t["bug-risk"] * 3 + Math.round(t.cleanup * 0.1) + Math.round(t.migration * 0.1));
-}
-
 // line format: "  warning - message - lib\x.dart:12:3 - rule_name"
 const START = /^\s*(error|warning|info)\s+-\s/;
 const FULL = /^\s*(error|warning|info)\s+-\s+(.*)\s+-\s+(.+?:\d+:\d+)\s+-\s+(\S+)\s*$/;
@@ -95,6 +89,10 @@ export function runAnalyze(dir: string): AnalyzeResult {
     return fail("dependencies not installed - run `flutter pub get` in the project first");
   }
   const bin = process.env.FLUTTER_BIN || "flutter";
+  // A FLUTTER_BIN that looks like a path must exist; a bare command name is left to the shell.
+  if (process.env.FLUTTER_BIN && /[\\/]/.test(bin) && !fs.existsSync(bin)) {
+    return fail(`FLUTTER_BIN does not exist: ${bin}`);
+  }
   const r = spawnSync(`"${bin}" analyze --no-pub`, {
     cwd: dir,
     shell: true,

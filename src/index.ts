@@ -1,7 +1,6 @@
 import { Command } from "commander";
 import path from "node:path";
-import { analyzePenalty, printAnalyze, runAnalyze, tierOf } from "./analyzer";
-import type { AnalyzeResult } from "./analyzer";
+import { printAnalyze, runAnalyze, tierOf } from "./analyzer";
 import { registerBench } from "./bench";
 import { findBloat } from "./bloat";
 import { registerPerf } from "./perf";
@@ -67,60 +66,8 @@ program.command("analyze <dir>").action((dir: string) => {
   process.exitCode = a.errors ? 1 : 0;
 });
 
-program
-  .command("scan <dir>")
-  .option("--no-analyze", "skip flutter analyze (faster)")
-  .action((dir: string, opts: { analyze: boolean }) => {
-    const t0 = Date.now();
-
-    const tFiles = Date.now();
-    const hits = findSecrets(dir);
-    const alerts = hits.filter((h) => h.level === "ALERT");
-    const infos = hits.length - alerts.length;
-    const rows = findBloat(dir, 80);
-    const huge = rows.filter((r) => r.len >= 200).length;
-    const filesMs = Date.now() - tFiles;
-
-    let a: AnalyzeResult = { ran: false, reason: "skipped (--no-analyze)", errors: 0, warnings: 0, infos: 0, issues: [] };
-    let analyzeMs = 0;
-    if (opts.analyze) {
-      console.log("Running flutter analyze (this can take a minute)...");
-      const tA = Date.now();
-      a = runAnalyze(dir);
-      analyzeMs = Date.now() - tA;
-    }
-
-    const secretPenalty = Math.min(45, alerts.length * 15);
-    const bloatPenalty = Math.min(40, huge * 3 + (rows.length - huge));
-    const aPenalty = analyzePenalty(a);
-    const score = Math.max(0, 100 - secretPenalty - bloatPenalty - aPenalty);
-
-    console.log(`\nFlutterGuard score: ${score}/100\n`);
-    console.log(`Secrets : ${alerts.length} ALERT, ${infos} INFO (Firebase config)  [-${secretPenalty}]`);
-    console.log(`Bloat   : ${rows.length} long methods (80+ lines), ${huge} very long (200+)  [-${bloatPenalty}]`);
-    if (a.ran) console.log(`Analyze : ${a.errors} errors, ${a.warnings} warnings, ${a.infos} infos  [-${aPenalty}]`);
-    else console.log(`Analyze : ${a.failed ? "FAILED" : "skipped"} (${a.reason})`);
-
-    if (alerts.length) {
-      console.log("\nSecrets:");
-      alerts.slice(0, 5).forEach((h) => console.log(`  ${h.name}  ${h.file}:${h.line}`));
-    }
-    if (a.ran) {
-      console.log("");
-      printAnalyze(a);
-    }
-    if (rows.length) {
-      console.log("\nLongest methods:");
-      rows.slice(0, 5).forEach((r) => console.log(`  ${r.len} lines  ${r.file}:${r.line}  ${r.name}`));
-    }
-    console.log("\nNote: the score formula is a first version. It is an estimate, not a guarantee.");
-    console.log(
-      `\nTiming: file checks ${filesMs}ms, analyze ${(analyzeMs / 1000).toFixed(1)}s, total ${((Date.now() - t0) / 1000).toFixed(1)}s`,
-    );
-    process.exitCode = a.failed ? 2 : alerts.length || a.errors ? 1 : 0;
-  });
-
 registerPerf(program, walk, readText);
+// "scan" is an alias of "report": one command, one summary, no health score.
 registerReport(program, { findSecrets, findBloat, runAnalyze, tierOf });
 registerBench(program);
 
