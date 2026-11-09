@@ -8,7 +8,7 @@
   {
     "project": "collections",
     "file": "lib/cart_provider.dart",
-    "description": "reads the whole cart but always updates the first document (unconfirmed, looks like a bug)",
+    "description": "decreaseQty reads the whole cart and updates docs.first instead of the document of the item (confirmed by reading the code, line 170; not reproduced in the running app)",
     "rule": null
   }
 ]
