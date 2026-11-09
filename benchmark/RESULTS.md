@@ -14,7 +14,7 @@ Projects measured: fyp, flutter-samples, chatdashboard, easyshop, collections, t
 - Labelled real problems that are no longer found: 0
 - Findings still waiting for a label: 0
 - Known bugs detected: 0 of 2
-  - missed: collections: lib/cart_provider.dart - reads the whole cart but always updates the first document (unconfirmed, looks like a bug)
+  - missed: collections: lib/cart_provider.dart - decreaseQty reads the whole cart and updates docs.first instead of the document of the item (confirmed by reading the code, line 170; not reproduced in the running app)
   - missed: easyshop: lib/repositories/cloud_functions.dart - forEach with an async closure: awaiting forEach does not wait for the deletes
 
 Rules with no labels at all (accuracy unknown): bloat/long-method, secrets/firebase-config-key
