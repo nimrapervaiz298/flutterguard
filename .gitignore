@@ -1,3 +1,5 @@
 node_modules
 samples-report*.json
 report*.json
+benchmark/review-sheet.md
+instagram-report.json
