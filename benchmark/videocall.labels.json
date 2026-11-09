@@ -1,0 +1,29 @@
+{
+  "project": "videocall",
+  "labels": [
+    {
+      "id": "d933b11c108e",
+      "rule": "perf/firestore-query-without-limit",
+      "file": "lib/data/api/home_api.dart",
+      "line": 12,
+      "verdict": "unlabeled",
+      "note": ""
+    },
+    {
+      "id": "5036ac138a64",
+      "rule": "perf/firestore-unbounded-read",
+      "file": "lib/presentaion/cubit/home/home_cubit.dart",
+      "line": 108,
+      "verdict": "unlabeled",
+      "note": ""
+    },
+    {
+      "id": "f37320ef6019",
+      "rule": "perf/firestore-unbounded-read",
+      "file": "lib/presentaion/cubit/home/home_cubit.dart",
+      "line": 127,
+      "verdict": "unlabeled",
+      "note": ""
+    }
+  ]
+}

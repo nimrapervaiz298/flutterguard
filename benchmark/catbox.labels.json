@@ -1,0 +1,13 @@
+{
+  "project": "catbox",
+  "labels": [
+    {
+      "id": "bb7d49475c2b",
+      "rule": "perf/firestore-unbounded-read",
+      "file": "lib/services/api.dart",
+      "line": 68,
+      "verdict": "unlabeled",
+      "note": ""
+    }
+  ]
+}

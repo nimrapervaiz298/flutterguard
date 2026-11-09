@@ -1,0 +1,13 @@
+{
+  "project": "chat-umar",
+  "labels": [
+    {
+      "id": "999b7daa9bf9",
+      "rule": "perf/firestore-query-without-limit",
+      "file": "lib/screens/search_screen.dart",
+      "line": 32,
+      "verdict": "unlabeled",
+      "note": ""
+    }
+  ]
+}
