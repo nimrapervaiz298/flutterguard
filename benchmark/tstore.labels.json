@@ -1,13 +1,13 @@
 {
-  "project": "tstore",
-  "labels": [
-    {
-      "id": "0a34d267df46",
-      "rule": "perf/sequential-await-in-loop",
-      "file": "lib/features/chat/data/repositories/chat_repository_impl.dart",
-      "line": 121,
-      "verdict": "unlabeled",
-      "note": ""
-    }
-  ]
+    "project":  "tstore",
+    "labels":  [
+                   {
+                       "id":  "0a34d267df46",
+                       "rule":  "perf/sequential-await-in-loop",
+                       "file":  "lib/features/chat/data/repositories/chat_repository_impl.dart",
+                       "line":  121,
+                       "verdict":  "true",
+                       "note":  "one Supabase query per message (N+1), independent, could run in parallel"
+                   }
+               ]
 }

@@ -6,12 +6,12 @@ Projects measured: fyp, flutter-samples, chatdashboard, easyshop, collections, t
 
 | Rule | true | false | unsure | precision | precision on untuned projects |
 |---|---|---|---|---|---|
-| perf/firestore-unbounded-read | 5 | 7 | 2 | 42% (5 of 12) | 22% (2 of 9) |
-| perf/sequential-await-in-loop | 1 | 0 | 2 | 100% (1 of 1) (few labels) | n/a (0 of 0) |
+| perf/firestore-unbounded-read | 6 | 6 | 2 | 50% (6 of 12) | 33% (3 of 9) |
+| perf/sequential-await-in-loop | 2 | 0 | 2 | 100% (2 of 2) (few labels) | 100% (1 of 1) |
 
 - Labelled false alarms that no longer appear: 11
 - Labelled real problems that are no longer found: 0
-- Findings still waiting for a label: 1
+- Findings still waiting for a label: 0
 - Known bugs detected: 0 of 2
   - missed: collections: lib/cart_provider.dart - reads the whole cart but always updates the first document (unconfirmed, looks like a bug)
   - missed: easyshop: lib/repositories/cloud_functions.dart - forEach with an async closure: awaiting forEach does not wait for the deletes
