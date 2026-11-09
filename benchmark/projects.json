@@ -4,5 +4,6 @@
   { "name": "chatdashboard",   "dir": "real-world/chatdashboard",    "labels": "chatdashboard.labels.json",   "tuned": false },
   { "name": "easyshop",        "dir": "real-world/easyshop",         "labels": "easyshop.labels.json",        "tuned": false },
   { "name": "collections",     "dir": "real-world/collections",      "labels": "collections.labels.json",     "tuned": false },
-  { "name": "tstore",          "dir": "real-world/tstore",           "labels": "tstore.labels.json",          "tuned": false }
+  { "name": "tstore",          "dir": "real-world/tstore",           "labels": "tstore.labels.json",          "tuned": false },
+  { "name": "instagram",       "dir": "real-world/instagram",        "labels": "instagram.labels.json",       "tuned": false }
 ]

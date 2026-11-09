@@ -1,0 +1,45 @@
+{
+    "project":  "instagram",
+    "labels":  [
+                   {
+                       "id":  "ec466307acc8",
+                       "rule":  "perf/firestore-query-without-limit",
+                       "file":  "lib/state/likes/providers/like_dislike_post_provider.dart",
+                       "line":  16,
+                       "verdict":  "false",
+                       "note":  "equality on postId+userId, at most ~1 doc"
+                   },
+                   {
+                       "id":  "87e98dc49d2a",
+                       "rule":  "perf/firestore-query-without-limit",
+                       "file":  "lib/state/posts/notifiers/delete_post_state_notifier.dart",
+                       "line":  100,
+                       "verdict":  "false",
+                       "note":  "needs all docs of one post to delete them; filtered by postId, not a missing limit"
+                   },
+                   {
+                       "id":  "eb0a4ea6ed3b",
+                       "rule":  "perf/sequential-await-in-loop",
+                       "file":  "lib/state/comments/notifiers/delete_comment_notifier.dart",
+                       "line":  33,
+                       "verdict":  "false",
+                       "note":  "documentId equality + limit(1), at most 1 doc"
+                   },
+                   {
+                       "id":  "b5e956701adb",
+                       "rule":  "perf/sequential-await-in-loop",
+                       "file":  "lib/state/likes/providers/like_dislike_post_provider.dart",
+                       "line":  28,
+                       "verdict":  "false",
+                       "note":  "loops over the result of an equality query on postId+userId, at most ~1 doc"
+                   },
+                   {
+                       "id":  "87a2990941d4",
+                       "rule":  "perf/sequential-await-in-loop",
+                       "file":  "lib/state/posts/notifiers/delete_post_state_notifier.dart",
+                       "line":  67,
+                       "verdict":  "false",
+                       "note":  "documentId equality + limit(1), at most 1 doc"
+                   }
+               ]
+}
