@@ -100,7 +100,7 @@ function blankNestedAsync(body: string): string {
 }
 
 // These cap the size of the result (a single document, a limit, or an aggregate).
-const CAPS_RESULT = /\.(doc|limit|limitToLast|count)\s*\(/;
+const CAPS_RESULT = /\.(doc|document|limit|limitToLast|count)\s*\(/;
 // where() filters, but does not cap the number of documents that come back.
 const FILTERS = /\.where\s*\(/;
 

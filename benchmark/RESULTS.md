@@ -7,11 +7,11 @@ Projects measured: fyp, flutter-samples, chatdashboard, easyshop, collections, t
 | Rule | true | false | unsure | precision | precision on untuned projects |
 |---|---|---|---|---|---|
 | perf/firestore-query-without-limit | 0 | 4 | 0 | 0% (0 of 4) (few labels) | 0% (0 of 4) |
-| perf/firestore-unbounded-read | 9 | 7 | 2 | 56% (9 of 16) | 46% (6 of 13) |
+| perf/firestore-unbounded-read | 9 | 6 | 2 | 60% (9 of 15) | 50% (6 of 12) |
 | perf/sequential-await-in-loop | 7 | 5 | 2 | 58% (7 of 12) | 55% (6 of 11) |
 | secrets/hardcoded-secret | 0 | 2 | 1 | 0% (0 of 2) (few labels) | 0% (0 of 2) |
 
-- Labelled false alarms that no longer appear: 11
+- Labelled false alarms that no longer appear: 12
 - Labelled real problems that are no longer found: 0
 - Findings still waiting for a label: 0
 - Known bugs detected: 0 of 2
