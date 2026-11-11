@@ -6,8 +6,8 @@
       "rule": "perf/firestore-query-without-limit",
       "file": "lib/screens/search_screen.dart",
       "line": 32,
-      "verdict": "unlabeled",
-      "note": ""
+      "verdict": "false",
+      "note": "two participant equality filters for one pair of users; code uses docs[0]"
     }
   ]
 }

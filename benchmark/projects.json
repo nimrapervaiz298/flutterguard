@@ -5,5 +5,8 @@
   { "name": "easyshop",        "dir": "real-world/easyshop",         "labels": "easyshop.labels.json",        "tuned": false },
   { "name": "collections",     "dir": "real-world/collections",      "labels": "collections.labels.json",     "tuned": false },
   { "name": "tstore",          "dir": "real-world/tstore",           "labels": "tstore.labels.json",          "tuned": false },
-  { "name": "instagram",       "dir": "real-world/instagram",        "labels": "instagram.labels.json",       "tuned": false }
+  { "name": "instagram",       "dir": "real-world/instagram",        "labels": "instagram.labels.json",       "tuned": false },
+  { "name": "videocall",        "dir": "real-world/videocall",        "labels": "videocall.labels.json",       "tuned": false },
+  { "name": "catbox",           "dir": "real-world/catbox",           "labels": "catbox.labels.json",          "tuned": false },
+  { "name": "chat-umar",        "dir": "real-world/chat-umar",        "labels": "chat-umar.labels.json",       "tuned": false }
 ]

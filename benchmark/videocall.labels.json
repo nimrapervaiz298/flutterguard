@@ -6,24 +6,24 @@
       "rule": "perf/firestore-query-without-limit",
       "file": "lib/data/api/home_api.dart",
       "line": 12,
-      "verdict": "unlabeled",
-      "note": ""
+      "verdict": "false",
+      "note": "marked '//Not Used' in the code: dead code, not a real problem"
     },
     {
       "id": "5036ac138a64",
       "rule": "perf/firestore-unbounded-read",
       "file": "lib/presentaion/cubit/home/home_cubit.dart",
       "line": 108,
-      "verdict": "unlabeled",
-      "note": ""
+      "verdict": "true",
+      "note": "getUser() reads the whole users collection with no limit"
     },
     {
       "id": "f37320ef6019",
       "rule": "perf/firestore-unbounded-read",
       "file": "lib/presentaion/cubit/home/home_cubit.dart",
       "line": 127,
-      "verdict": "unlabeled",
-      "note": ""
+      "verdict": "true",
+      "note": "getCallHistory() downloads all calls of all users, then filters by callerId/receiverId in Dart instead of where()"
     }
   ]
 }

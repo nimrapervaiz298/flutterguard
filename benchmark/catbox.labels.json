@@ -6,8 +6,8 @@
       "rule": "perf/firestore-unbounded-read",
       "file": "lib/services/api.dart",
       "line": 68,
-      "verdict": "unlabeled",
-      "note": ""
+      "verdict": "false",
+      "note": "single document read via the old .document() API; the rule only recognises .doc()"
     }
   ]
 }
