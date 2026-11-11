@@ -1,0 +1,29 @@
+{
+    "project":  "twitter-clone",
+    "labels":  [
+                   {
+                       "id":  "af1a4e1ef677",
+                       "rule":  "perf/sequential-await-in-loop",
+                       "file":  "lib/state/base/tweetBaseState.dart",
+                       "line":  50,
+                       "verdict":  "true",
+                       "note":  "one RTDB read per reply id (N+1), independent; sort at last iteration must move after the loop if parallelised"
+                   },
+                   {
+                       "id":  "35223d4f6a43",
+                       "rule":  "perf/sequential-await-in-loop",
+                       "file":  "lib/state/bookmarkState.dart",
+                       "line":  56,
+                       "verdict":  "true",
+                       "note":  "one RTDB read per bookmark via getTweetDetail (N+1), independent; could run with Future.wait"
+                   },
+                   {
+                       "id":  "ad0d1db6eb03",
+                       "rule":  "perf/sequential-await-in-loop",
+                       "file":  "lib/state/suggestionUserState.dart",
+                       "line":  92,
+                       "verdict":  "true",
+                       "note":  "one RTDB set per selected user, independent paths, could run in parallel; list is likely small"
+                   }
+               ]
+}

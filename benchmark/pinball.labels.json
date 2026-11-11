@@ -1,0 +1,37 @@
+{
+    "project":  "pinball",
+    "labels":  [
+                   {
+                       "id":  "a96de404c404",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "packages/leaderboard_repository/lib/src/leaderboard_repository.dart",
+                       "line":  54,
+                       "verdict":  "true",
+                       "note":  "reads the whole leaderboard ordered by score, but only index 9 is used; limit(10) would be enough"
+                   },
+                   {
+                       "id":  "3e28d6f8ee76",
+                       "rule":  "perf/sequential-await-in-loop",
+                       "file":  "lib/game/components/backbox/displays/initials_input_display.dart",
+                       "line":  57,
+                       "verdict":  "false",
+                       "note":  "fixed 3 iterations, local Flame component add, no I/O, order matters"
+                   },
+                   {
+                       "id":  "4b39eb186ef7",
+                       "rule":  "perf/sequential-await-in-loop",
+                       "file":  "packages/pinball_components/lib/src/components/error_component.dart",
+                       "line":  83,
+                       "verdict":  "false",
+                       "note":  "adds local text components per line, no I/O, few lines"
+                   },
+                   {
+                       "id":  "fca9231ad9fe",
+                       "rule":  "secrets/hardcoded-secret",
+                       "file":  "web/__/firebase/8.10.1/firebase-auth.js",
+                       "line":  1,
+                       "verdict":  "false",
+                       "note":  "vendored minified Firebase JS SDK 8.10.1, not project code"
+                   }
+               ]
+}

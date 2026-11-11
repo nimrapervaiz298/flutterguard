@@ -1,0 +1,21 @@
+{
+    "project":  "starter-arch",
+    "labels":  [
+                   {
+                       "id":  "2beb6491e07d",
+                       "rule":  "perf/sequential-await-in-loop",
+                       "file":  "lib/src/features/jobs/data/jobs_repository.dart",
+                       "line":  41,
+                       "verdict":  "true",
+                       "note":  "deletes each matching entry one by one; independent documents, could run in parallel"
+                   },
+                   {
+                       "id":  "004fae501737",
+                       "rule":  "secrets/hardcoded-secret",
+                       "file":  "lib/src/constants/keys.dart",
+                       "line":  2,
+                       "verdict":  "false",
+                       "note":  "UI widget key constants (tabBar, jobsTab...); flagged because the name contains \u0027password\u0027"
+                   }
+               ]
+}

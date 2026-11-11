@@ -1,0 +1,13 @@
+{
+    "project":  "timy",
+    "labels":  [
+                   {
+                       "id":  "bd868c301094",
+                       "rule":  "perf/sequential-await-in-loop",
+                       "file":  "lib/data/channel_repository.dart",
+                       "line":  137,
+                       "verdict":  "true",
+                       "note":  "one setData per invited member, independent documents, could run in parallel with Future.wait"
+                   }
+               ]
+}
