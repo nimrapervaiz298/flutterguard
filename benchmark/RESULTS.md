@@ -9,6 +9,7 @@ Projects measured: fyp, flutter-samples, chatdashboard, easyshop, collections, t
 | perf/firestore-query-without-limit | 0 | 4 | 0 | 0% (0 of 4) (few labels) | 0% (0 of 4) |
 | perf/firestore-unbounded-read | 8 | 7 | 2 | 53% (8 of 15) | 42% (5 of 12) |
 | perf/sequential-await-in-loop | 2 | 3 | 2 | 40% (2 of 5) (few labels) | 25% (1 of 4) |
+| secrets/hardcoded-secret | 0 | 0 | 1 | n/a (0 of 0) | n/a (0 of 0) |
 
 - Labelled false alarms that no longer appear: 11
 - Labelled real problems that are no longer found: 0
@@ -17,4 +18,4 @@ Projects measured: fyp, flutter-samples, chatdashboard, easyshop, collections, t
   - missed: collections: lib/cart_provider.dart - decreaseQty reads the whole cart and updates docs.first instead of the document of the item (confirmed by reading the code, line 170; not reproduced in the running app)
   - missed: easyshop: lib/repositories/cloud_functions.dart - forEach with an async closure: awaiting forEach does not wait for the deletes
 
-Rules with no labels at all (accuracy unknown): bloat/long-method, secrets/firebase-config-key, secrets/hardcoded-secret
+Rules with no labels at all (accuracy unknown): bloat/long-method, secrets/firebase-config-key

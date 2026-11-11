@@ -1,29 +1,37 @@
 {
-  "project": "videocall",
-  "labels": [
-    {
-      "id": "d933b11c108e",
-      "rule": "perf/firestore-query-without-limit",
-      "file": "lib/data/api/home_api.dart",
-      "line": 12,
-      "verdict": "false",
-      "note": "marked '//Not Used' in the code: dead code, not a real problem"
-    },
-    {
-      "id": "5036ac138a64",
-      "rule": "perf/firestore-unbounded-read",
-      "file": "lib/presentaion/cubit/home/home_cubit.dart",
-      "line": 108,
-      "verdict": "true",
-      "note": "getUser() reads the whole users collection with no limit"
-    },
-    {
-      "id": "f37320ef6019",
-      "rule": "perf/firestore-unbounded-read",
-      "file": "lib/presentaion/cubit/home/home_cubit.dart",
-      "line": 127,
-      "verdict": "true",
-      "note": "getCallHistory() downloads all calls of all users, then filters by callerId/receiverId in Dart instead of where()"
-    }
-  ]
+    "project":  "videocall",
+    "labels":  [
+                   {
+                       "id":  "d933b11c108e",
+                       "rule":  "perf/firestore-query-without-limit",
+                       "file":  "lib/data/api/home_api.dart",
+                       "line":  12,
+                       "verdict":  "false",
+                       "note":  "marked \u0027//Not Used\u0027 in the code: dead code, not a real problem"
+                   },
+                   {
+                       "id":  "5036ac138a64",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/presentaion/cubit/home/home_cubit.dart",
+                       "line":  108,
+                       "verdict":  "true",
+                       "note":  "getUser() reads the whole users collection with no limit"
+                   },
+                   {
+                       "id":  "f37320ef6019",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/presentaion/cubit/home/home_cubit.dart",
+                       "line":  127,
+                       "verdict":  "true",
+                       "note":  "getCallHistory() downloads all calls of all users, then filters by callerId/receiverId in Dart instead of where()"
+                   },
+                   {
+                       "id":  "6fc7e917c086",
+                       "rule":  "secrets/hardcoded-secret",
+                       "file":  "lib/shared/constats.dart",
+                       "line":  18,
+                       "verdict":  "unsure",
+                       "note":  "agora-style token (prefix 006, 81 chars) in a constants file; comment says to replace it, so it looks like a sample value; validity unknown"
+                   }
+               ]
 }
