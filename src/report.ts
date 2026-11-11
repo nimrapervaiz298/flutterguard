@@ -3,6 +3,7 @@ import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { findPerfInText, shouldCheckPerf } from "./perf";
+import { findRulesIssues } from "./firestore-rules";
 import { configureScanner, getScanner, readText, walk } from "./scanner";
 
 export const SCHEMA_VERSION = 1;
@@ -288,6 +289,27 @@ export function fromPerf(
   });
 }
 
+export function fromRules(
+  f: ReturnType<typeof findRulesIssues>[number],
+  file: string,
+  projectDir: string,
+): Diagnostic {
+  const location = { file: toPosix(path.relative(projectDir, file)), line: f.line };
+  const open = f.rule === "open-access";
+  return makeDiagnostic({
+    rule: `firestore-rules/${f.rule}`,
+    category: "security",
+    severity: open ? "high" : "medium",
+    confidence: open ? "medium" : "low", // some apps keep login-only rules on purpose
+    source: "static",
+    message: open ? "Firestore rule allows everyone" : "Firestore rule only checks that the user is logged in",
+    evidence: `allow ${f.methods.join(", ")}`,
+    location,
+    anchor: f.methods.join(","),
+    why: f.message,
+    fix: "Check ownership or membership in the rule, for example request.auth.uid == userId.",
+  });
+}
 // ---------- the report ----------
 export interface ReportDeps {
   findSecrets(dir: string): SecretHitLike[];
@@ -334,6 +356,14 @@ export function buildReport(
     }
   });
 
+  timed("firestore-rules", () => {
+    for (const file of walk(dir)) {
+      if (path.basename(file) !== "firestore.rules") continue;
+      for (const f of findRulesIssues(readText(file))) {
+        diagnostics.push(fromRules(f, file, dir));
+      }
+    }
+  });
   if (opts.analyze) {
     const s = Date.now();
     try {
