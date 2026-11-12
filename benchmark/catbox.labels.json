@@ -1,13 +1,21 @@
 {
-  "project": "catbox",
-  "labels": [
-    {
-      "id": "bb7d49475c2b",
-      "rule": "perf/firestore-unbounded-read",
-      "file": "lib/services/api.dart",
-      "line": 68,
-      "verdict": "false",
-      "note": "single document read via the old .document() API; the rule only recognises .doc()"
-    }
-  ]
+    "project":  "catbox",
+    "labels":  [
+                   {
+                       "id":  "0e5efa680374",
+                       "rule":  "firestore-rules/open-access",
+                       "file":  "firebase/firestore.rules",
+                       "line":  10,
+                       "verdict":  "false",
+                       "note":  "public read of the cats catalog is intended (author comment: Allow public read access to all cats); write requires isAdmin(). Rule fix was written from e-school, so this is a hold-out label"
+                   },
+                   {
+                       "id":  "bb7d49475c2b",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/services/api.dart",
+                       "line":  68,
+                       "verdict":  "false",
+                       "note":  "single document read via the old .document() API; the rule only recognises .doc()"
+                   }
+               ]
 }

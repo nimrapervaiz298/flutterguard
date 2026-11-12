@@ -7,6 +7,7 @@ Projects measured: fyp, flutter-samples, chatdashboard, easyshop, collections, t
 | Rule | true | false | unsure | precision | precision on untuned projects |
 |---|---|---|---|---|---|
 | firestore-rules/auth-only-write | 3 | 0 | 0 | 100% (3 of 3) (few labels) | 100% (3 of 3) |
+| firestore-rules/open-access | 1 | 1 | 0 | 50% (1 of 2) (few labels) | 100% (1 of 1) |
 | perf/firestore-query-without-limit | 0 | 1 | 0 | 0% (0 of 1) (few labels) | 0% (0 of 1) |
 | perf/firestore-unbounded-read | 9 | 6 | 2 | 60% (9 of 15) | 50% (6 of 12) |
 | perf/foreach-async-not-awaited | 1 | 0 | 0 | 100% (1 of 1) (few labels) | 100% (1 of 1) |

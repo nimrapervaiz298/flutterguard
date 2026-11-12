@@ -34,7 +34,7 @@ export function findRulesIssues(text: string): RulesFinding[] {
     if (!methods.length) continue;
     const cond = (m[2] ?? "").replace(/\s+/g, " ").trim();
     const line = masked.slice(0, m.index).split("\n").length;
-    if (cond === "true") {
+    if (cond === "true" || m[2] === undefined) {
       out.push({
         rule: "open-access",
         line,

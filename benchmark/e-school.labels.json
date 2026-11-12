@@ -10,6 +10,14 @@
                        "note":  "match /{document=**}: any signed-in user can write everything. Line 5 \u0027allow read;\u0027 (public read of all data) is not flagged by the rule (recall gap). File is under Functions/TypeScript, may not be the deployed rules"
                    },
                    {
+                       "id":  "33ee9bb0e103",
+                       "rule":  "firestore-rules/open-access",
+                       "file":  "Functions/TypeScript/firestore.rules",
+                       "line":  5,
+                       "verdict":  "true",
+                       "note":  "allow read; under match /{document=**}: the whole database is publicly readable without login. Rule fix was written from this project, so not evidence of precision. File is under Functions/TypeScript, may not be the deployed rules"
+                   },
+                   {
                        "id":  "e82b07b2e225",
                        "rule":  "perf/sequential-await-in-loop",
                        "file":  "lib/core/services/ChatServices.dart",
