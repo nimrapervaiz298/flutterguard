@@ -84,7 +84,7 @@ Precision means: of the findings a rule reported, how many were real problems. I
 |---|---|---|
 | `perf/firestore-unbounded-read` | 50% (6 true, 6 false, 2 unsure) | Cannot tell a small per-user list from a large global collection. |
 | `perf/sequential-await-in-loop` | 55% (6 true, 5 false, 1 unsure) | Most true labels are one pattern (one independent read or write per item). Loops bounded by `limit(1)` are still flagged. |
-| `perf/firestore-query-without-limit` | 0 of 4 | Every labelled finding was a false alarm. |
+| `perf/firestore-query-without-limit` | 0 of 1 labelled (0 true labels exist) | Skips queries that only use `isEqualTo`. That change was made after seeing 4 false alarms in 4 projects, so its precision on new projects is unmeasured. |
 | `secrets/hardcoded-secret` | 0 of 2 (1 unsure) | Only 3 labels. Flagged a vendored Firebase JS file and a class of UI test keys. |
 | `bloat/long-method`, `secrets/firebase-config-key` | not measured | |
 | `firestore-rules/*` | not measured | 2 findings in total, both in the one project the rule was written from. 0 findings in 6 other rules files. Recall unknown. |
