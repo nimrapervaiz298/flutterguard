@@ -275,7 +275,20 @@ export function fromPerf(
       fix: "Add limit() if the screen only needs the first N results, or paginate.",
     });
   }
-  return makeDiagnostic({
+  if (f.rule === "foreach-async-not-awaited") {
+    return makeDiagnostic({
+      rule: "perf/foreach-async-not-awaited",
+      category: "reliability",
+      severity: "medium",
+      confidence: "medium",
+      source: "static",
+      message: "forEach does not wait for an async closure",
+      location,
+      anchor: "foreach-async",
+      why: "forEach ignores the Future returned by an async closure, so the code after it runs before the work inside is finished, even with await in front of forEach.",
+      fix: "Use a for-in loop with await, or Future.wait(list.map((x) async { ... })).",
+    });
+  }  return makeDiagnostic({
     rule: "perf/sequential-await-in-loop",
     category: "performance",
     severity: "low",

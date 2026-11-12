@@ -2,7 +2,7 @@ import type { Command } from "commander";
 import path from "node:path";
 
 export type PerfFinding = {
-  rule: "firestore-unbounded-read" | "firestore-query-without-limit" | "sequential-await-in-loop";
+  rule: "firestore-unbounded-read" | "firestore-query-without-limit" | "sequential-await-in-loop" | "foreach-async-not-awaited";
   severity: "warning" | "info";
   line: number;
   message: string;
@@ -176,9 +176,25 @@ function loopAwaits(masked: string): PerfFinding[] {
   return out;
 }
 
+// Rule 4: forEach with an async closure. forEach ignores the Future the closure returns,
+// so the code after it runs before the work inside is finished, even with "await" in front.
+function forEachAsync(masked: string): PerfFinding[] {
+  const out: PerfFinding[] = [];
+  const re = /\.forEach\s*\(\s*(?:\([^()]*\)|\w+)\s*async\b/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(masked)) !== null) {
+    out.push({
+      rule: "foreach-async-not-awaited",
+      severity: "warning",
+      line: lineOf(masked, m.index),
+      message: "forEach does not wait for an async closure. The code after it runs before the work inside is done.",
+    });
+  }
+  return out;
+}
 export function findPerfInText(text: string): PerfFinding[] {
   const masked = mask(text);
-  return [...firestoreReads(masked, text), ...loopAwaits(masked)].sort((a, b) => a.line - b.line);
+  return [...firestoreReads(masked, text), ...loopAwaits(masked), ...forEachAsync(masked)].sort((a, b) => a.line - b.line);
 }
 
 export function registerPerf(
