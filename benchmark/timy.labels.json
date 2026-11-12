@@ -2,6 +2,22 @@
     "project":  "timy",
     "labels":  [
                    {
+                       "id":  "3a0ef1ec9749",
+                       "rule":  "firestore-rules/auth-only-write",
+                       "file":  "firebase/firestore.rules",
+                       "line":  8,
+                       "verdict":  "true",
+                       "note":  "any signed-in user can read and write every calendar document; no ownership check. Rule was written from this project, not evidence of precision"
+                   },
+                   {
+                       "id":  "1071382a68c4",
+                       "rule":  "firestore-rules/auth-only-write",
+                       "file":  "firebase/firestore.rules",
+                       "line":  33,
+                       "verdict":  "true",
+                       "note":  "create only checks login, not that userId matches the caller; read of all users may be intentional (author TODO). Rule was written from this project, not evidence of precision"
+                   },
+                   {
                        "id":  "bd868c301094",
                        "rule":  "perf/sequential-await-in-loop",
                        "file":  "lib/data/channel_repository.dart",

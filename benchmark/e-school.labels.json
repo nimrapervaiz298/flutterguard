@@ -2,6 +2,14 @@
     "project":  "e-school",
     "labels":  [
                    {
+                       "id":  "d49752545eec",
+                       "rule":  "firestore-rules/auth-only-write",
+                       "file":  "Functions/TypeScript/firestore.rules",
+                       "line":  6,
+                       "verdict":  "true",
+                       "note":  "match /{document=**}: any signed-in user can write everything. Line 5 \u0027allow read;\u0027 (public read of all data) is not flagged by the rule (recall gap). File is under Functions/TypeScript, may not be the deployed rules"
+                   },
+                   {
                        "id":  "e82b07b2e225",
                        "rule":  "perf/sequential-await-in-loop",
                        "file":  "lib/core/services/ChatServices.dart",

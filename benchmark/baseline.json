@@ -1,6 +1,11 @@
 {
   "version": 1,
   "rules": {
+    "firestore-rules/auth-only-write": {
+      "tp": 3,
+      "fp": 0,
+      "unsure": 0
+    },
     "perf/firestore-query-without-limit": {
       "tp": 0,
       "fp": 1,
