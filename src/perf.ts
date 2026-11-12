@@ -142,6 +142,15 @@ function firestoreReads(masked: string, original: string): PerfFinding[] {
   return out;
 }
 
+// True when the nearest query above the loop has a fixed small bound: limit(<number>) or documentId equality.
+function loopSourceIsBounded(masked: string, loopIdx: number): boolean {
+  const before = masked.slice(Math.max(0, loopIdx - 800), loopIdx);
+  const at = before.lastIndexOf(".collection");
+  if (at === -1) return false;
+  const seg = before.slice(at);
+  return /\.limit\s*\(\s*\d+\s*\)/.test(seg) || /documentId[\s\S]{0,40}isEqualTo/.test(seg);
+}
+
 // Rule 3: await inside a for loop
 function loopAwaits(masked: string): PerfFinding[] {
   const out: PerfFinding[] = [];
@@ -160,6 +169,7 @@ function loopAwaits(masked: string): PerfFinding[] {
     while (i < masked.length && /\s/.test(masked[i])) i++;
     const bodyEnd = masked[i] === "{" ? matchClose(masked, i, "{", "}") : statementEnd(masked, i);
     if (bodyEnd === -1) continue;
+    if (loopSourceIsBounded(masked, m.index)) continue;
     const body = blankNestedAsync(masked.slice(i, bodyEnd));
     const rel = body.search(/\bawait\b/);
     if (rel === -1) continue;

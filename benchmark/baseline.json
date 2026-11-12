@@ -18,7 +18,7 @@
     },
     "perf/sequential-await-in-loop": {
       "tp": 7,
-      "fp": 5,
+      "fp": 3,
       "unsure": 2
     },
     "secrets/hardcoded-secret": {
