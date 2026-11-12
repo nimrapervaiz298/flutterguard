@@ -2,6 +2,7 @@ export type RulesFinding = {
   rule: "auth-only-write" | "open-access";
   line: number;
   methods: string[];
+  scope: "wide" | "narrow";
   message: string;
 };
 
@@ -16,6 +17,20 @@ function maskComments(text: string): string {
 
 // "request.auth != null" or "request.auth.uid != null" and nothing else.
 const LOGIN_ONLY = /^request\.auth(\.uid)?\s*!=\s*null$/;
+
+// "wide" when an enclosing match block has a recursive wildcard such as {document=**}.
+function scopeAt(masked: string, idx: number): "wide" | "narrow" {
+  const stack: boolean[] = [];
+  const re = /\bmatch[ \t]+((?:[^{}\n]|\{[^{}\n]*\})*)\{|\{|\}/g;
+  const before = masked.slice(0, idx);
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(before)) !== null) {
+    if (m[0] === "}") stack.pop();
+    else if (m[0] === "{") stack.push(false);
+    else stack.push(/=\*\*/.test(m[1]));
+  }
+  return stack.some(Boolean) ? "wide" : "narrow";
+}
 
 export function findRulesIssues(text: string): RulesFinding[] {
   const masked = maskComments(text);
@@ -39,6 +54,7 @@ export function findRulesIssues(text: string): RulesFinding[] {
         rule: "open-access",
         line,
         methods,
+        scope: scopeAt(masked, m.index),
         message: "This rule allows everyone, signed in or not. Anyone who knows the project can use it.",
       });
       continue;
@@ -50,6 +66,7 @@ export function findRulesIssues(text: string): RulesFinding[] {
         rule: "auth-only-write",
         line,
         methods,
+        scope: scopeAt(masked, m.index),
         message: "Any signed-in user can change this data. The rule checks that the user is logged in, not that the data belongs to them.",
       });
     }
