@@ -12,7 +12,7 @@ A command-line tool that scans a Flutter/Dart project for security, reliability 
 | `bloat` | Very long methods (80+ lines), estimated by counting braces. It is a heuristic, not a parser. Top-level functions are not reported. | Estimate (medium) |
 | `analyze` | Runs `flutter analyze` and sorts its output into error, bug-risk, migration, cleanup and style. | The official Dart analyzer (high) |
 | `perf` | Firestore reads of a whole collection (`firestore-unbounded-read`), queries with `where()` but no `limit()` (`firestore-query-without-limit`), `forEach` with an async closure (`foreach-async-not-awaited`), and `await` inside a loop (`sequential-await-in-loop`). Test, tool and script folders are skipped. | Heuristic (medium to low) |
-| `firestore-rules` | In `firestore.rules` files: `allow ... if true` (`open-access`) and write rules that only check the user is logged in (`auth-only-write`). | Pattern match, not measured |
+| `firestore-rules` | In `firestore.rules` files: `allow` rules with no condition or `if true` (`open-access`) and write rules that only check the user is logged in (`auth-only-write`). | Pattern match, not measured |
 
 Secret values are never printed. Reports contain the rule, the file and the line, not the secret.
 
@@ -91,7 +91,7 @@ Precision means: of the findings a rule reported, how many were real problems. I
 | `perf/firestore-query-without-limit` | 0 of 1 labelled (0 true labels exist) | Skips queries that only use `isEqualTo`. That change was made after seeing 4 false alarms in 4 projects, so its precision on new projects is unmeasured. |
 | `secrets/hardcoded-secret` | 0 of 2 (1 unsure) | Only 3 labels. Flagged a vendored Firebase JS file and a class of UI test keys. |
 | `bloat/long-method`, `secrets/firebase-config-key` | not measured | |
-| `firestore-rules/*` | not measured | 2 findings in total, both in the one project the rule was written from. 0 findings in 6 other rules files. Recall unknown. |
+| `firestore-rules/*` | not measured | 5 findings in 8 rules files. `auth-only-write`: 3 findings, all true, 2 of them in the project the rule was written from. `open-access`: 2 findings, 1 true (in the project the fix was written from) and 1 false (an intentionally public catalog). 5 files had no findings; recall unknown. |
 | Known bugs caught | 1 of 2 | The `forEach` bug is caught by a rule written from that same project, so this says nothing about recall elsewhere. The wrong-document update (`docs.first`) is still missed. |
 | `perf/foreach-async-not-awaited` | 1 of 1, not a meaningful number | One example in 14 projects, the project the rule was written from. Precision and recall on other projects are unmeasured. |
 
@@ -121,6 +121,7 @@ npx tsx src/index.ts bench score report.json benchmark/myproject.labels.json
 - The secrets check does not skip vendored or minified files.
 - A Firestore read through a variable (for example `final ref = collection(path); await ref.get()`) is not detected.
 - `firestore-rules` only understands single-statement `allow` lines, and treats a helper function as login-only only if its whole body is a login check.
+- `firestore-rules` does not look at `match` scope, so a public read of a whole database and a public read of a small catalog are flagged the same way. It also does not understand multi-line conditions.
 - Only Dart and Flutter are supported so far.
 
 ## Tests
