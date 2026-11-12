@@ -6,16 +6,16 @@ Projects measured: fyp, flutter-samples, chatdashboard, easyshop, collections, t
 
 | Rule | true | false | unsure | precision | precision on untuned projects |
 |---|---|---|---|---|---|
-| perf/firestore-query-without-limit | 0 | 4 | 0 | 0% (0 of 4) (few labels) | 0% (0 of 4) |
+| perf/firestore-query-without-limit | 0 | 1 | 0 | 0% (0 of 1) (few labels) | 0% (0 of 1) |
 | perf/firestore-unbounded-read | 9 | 6 | 2 | 60% (9 of 15) | 50% (6 of 12) |
 | perf/sequential-await-in-loop | 7 | 5 | 2 | 58% (7 of 12) | 55% (6 of 11) |
 | secrets/hardcoded-secret | 0 | 2 | 1 | 0% (0 of 2) (few labels) | 0% (0 of 2) |
 
-- Labelled false alarms that no longer appear: 12
+- Labelled false alarms that no longer appear: 15
 - Labelled real problems that are no longer found: 0
 - Findings still waiting for a label: 0
 - Known bugs detected: 0 of 2
   - missed: collections: lib/cart_provider.dart - decreaseQty reads the whole cart and updates docs.first instead of the document of the item (confirmed by reading the code, line 170; not reproduced in the running app)
   - missed: easyshop: lib/repositories/cloud_functions.dart - forEach with an async closure: awaiting forEach does not wait for the deletes
 
-Rules with no labels at all (accuracy unknown): bloat/long-method, secrets/firebase-config-key
+Rules with no labels at all (accuracy unknown): bloat/long-method, firestore-rules/auth-only-write, secrets/firebase-config-key

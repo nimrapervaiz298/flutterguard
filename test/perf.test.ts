@@ -15,7 +15,7 @@ test("ignores read with limit", () => {
 });
 
 test("where without limit is reported with the lower-level rule", () => {
-  const code = `final s = await db.collection('products').where('a', isEqualTo: 1).get();`;
+  const code = `final s = await db.collection('products').where('a', isGreaterThan: 1).get();`;
   assert.deepEqual(rules(code), ["firestore-query-without-limit"]);
 });
 
