@@ -3,7 +3,7 @@
     "project": "easyshop",
     "file": "lib/repositories/cloud_functions.dart",
     "description": "forEach with an async closure: awaiting forEach does not wait for the deletes",
-    "rule": null
+    "rule": "perf/foreach-async-not-awaited"
   },
   {
     "project": "collections",

@@ -11,6 +11,11 @@
       "fp": 6,
       "unsure": 2
     },
+    "perf/foreach-async-not-awaited": {
+      "tp": 1,
+      "fp": 0,
+      "unsure": 0
+    },
     "perf/sequential-await-in-loop": {
       "tp": 7,
       "fp": 5,
