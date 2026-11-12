@@ -40,6 +40,8 @@ report <dir>   run every check and print one report (alias: scan)
   --stable          leave out timestamps, timings and absolute paths,
                     so two runs on the same project print identical JSON
   --max-file-kb <n> skip files bigger than this (default 1000)
+  --fail-on <sev>   exit 1 when a finding has this severity or higher
+                    (critical, high, medium, low, info; default: high)
 
 check <dir>    count files and lines per language
 secrets <dir>  run only the secrets check
@@ -63,6 +65,8 @@ $env:FLUTTER_BIN = "C:\src\flutter\bin\flutter.bat"
 | 0 | Every requested check ran and there are no high or critical findings |
 | 1 | There are high or critical findings |
 | 2 | A check or the tool itself failed (for example Flutter was not found), so the report is incomplete |
+
+`--fail-on medium` is noisy on `perf` findings today, because their measured precision is about 50%.
 
 A check that was skipped on purpose (`--no-analyze`) or does not apply (not a Flutter project) is reported as `skipped` and does not change the exit code. A check that should have run but could not is reported as `failed` and makes the exit code 2.
 
