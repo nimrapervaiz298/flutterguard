@@ -11,7 +11,7 @@ A command-line tool that scans a Flutter/Dart project for security, reliability 
 | `secrets` | Hardcoded API keys, AWS keys, private keys, passwords. Firebase client config keys are reported as `info` only. Placeholder values and generic secrets in test files are ignored. | Pattern match (medium) |
 | `bloat` | Very long methods (80+ lines), estimated by counting braces. It is a heuristic, not a parser. Top-level functions are not reported. | Estimate (medium) |
 | `analyze` | Runs `flutter analyze` and sorts its output into error, bug-risk, migration, cleanup and style. | The official Dart analyzer (high) |
-| `perf` | Firestore reads of a whole collection (`firestore-unbounded-read`), queries with `where()` but no `limit()` (`firestore-query-without-limit`), and `await` inside a loop (`sequential-await-in-loop`). Test, tool and script folders are skipped. | Heuristic (medium to low) |
+| `perf` | Firestore reads of a whole collection (`firestore-unbounded-read`), queries with `where()` but no `limit()` (`firestore-query-without-limit`), `forEach` with an async closure (`foreach-async-not-awaited`), and `await` inside a loop (`sequential-await-in-loop`). Test, tool and script folders are skipped. | Heuristic (medium to low) |
 | `firestore-rules` | In `firestore.rules` files: `allow ... if true` (`open-access`) and write rules that only check the user is logged in (`auth-only-write`). | Pattern match, not measured |
 
 Secret values are never printed. Reports contain the rule, the file and the line, not the secret.
@@ -88,7 +88,8 @@ Precision means: of the findings a rule reported, how many were real problems. I
 | `secrets/hardcoded-secret` | 0 of 2 (1 unsure) | Only 3 labels. Flagged a vendored Firebase JS file and a class of UI test keys. |
 | `bloat/long-method`, `secrets/firebase-config-key` | not measured | |
 | `firestore-rules/*` | not measured | 2 findings in total, both in the one project the rule was written from. 0 findings in 6 other rules files. Recall unknown. |
-| Known bugs caught | 0 of 2 | One `forEach` with an async closure and one wrong-document update were found by reading code; the tool missed both. |
+| Known bugs caught | 1 of 2 | The `forEach` bug is caught by a rule written from that same project, so this says nothing about recall elsewhere. The wrong-document update (`docs.first`) is still missed. |
+| `perf/foreach-async-not-awaited` | 1 of 1, not a meaningful number | One example in 14 projects, the project the rule was written from. Precision and recall on other projects are unmeasured. |
 
 Read these numbers with care:
 
