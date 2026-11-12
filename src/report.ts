@@ -94,9 +94,12 @@ export function makeDiagnostic(input: DiagnosticInput): Diagnostic {
  *   1 = high or critical findings
  *   2 = a check (or the tool itself) failed, so the report is incomplete
  */
-export function exitCodeFor(report: Report): number {
+const FAIL_ORDER: Severity[] = ["critical", "high", "medium", "low", "info"];
+
+export function exitCodeFor(report: Report, failOn: Severity = "high"): number {
   if (report.checks.some((c) => c.status === "failed")) return 2;
-  const blocking = report.summary.bySeverity.critical + report.summary.bySeverity.high;
+  const limit = FAIL_ORDER.indexOf(failOn);
+  const blocking = FAIL_ORDER.slice(0, limit + 1).reduce((n, s) => n + report.summary.bySeverity[s], 0);
   return blocking > 0 ? 1 : 0;
 }
 
@@ -451,7 +454,8 @@ export function registerReport(program: Command, deps: ReportDeps): void {
     .option("--out <file>", "write the JSON report to a file")
     .option("--max-file-kb <n>", "skip files larger than this many KB", "1000")
     .option("--stable", "omit timestamps, timings and absolute paths so two runs print identical JSON")
-    .action((dir: string, opts: { analyze: boolean; json?: boolean; out?: string; maxFileKb: string; stable?: boolean }) => {
+    .option("--fail-on <severity>", "exit 1 when a finding has this severity or higher (critical, high, medium, low, info)", "high")
+    .action((dir: string, opts: { analyze: boolean; json?: boolean; out?: string; maxFileKb: string; stable?: boolean; failOn: string }) => {
       try {
         const kb = Number(opts.maxFileKb);
         if (!Number.isFinite(kb) || kb <= 0) throw new Error("--max-file-kb must be a positive number");
@@ -497,7 +501,10 @@ export function registerReport(program: Command, deps: ReportDeps): void {
           }
         }
 
-        process.exitCode = exitCodeFor(report);
+        if (!FAIL_ORDER.includes(opts.failOn as Severity)) {
+          throw new Error("--fail-on must be one of: " + FAIL_ORDER.join(", "));
+        }
+        process.exitCode = exitCodeFor(report, opts.failOn as Severity);
         if (!opts.json) {
           console.log(`\nExit code ${process.exitCode} (0 clean, 1 high/critical findings, 2 a check failed)`);
         }
