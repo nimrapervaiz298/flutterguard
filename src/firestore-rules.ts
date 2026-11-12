@@ -19,6 +19,13 @@ const LOGIN_ONLY = /^request\.auth(\.uid)?\s*!=\s*null$/;
 
 export function findRulesIssues(text: string): RulesFinding[] {
   const masked = maskComments(text);
+  // helpers whose whole body is a login check, for example: function isSignedIn() { return request.auth != null; }
+  const loginHelpers = new Set<string>();
+  const fn = /function\s+(\w+)\s*\(\s*\)\s*\{\s*return\s+([^;]*?)\s*;?\s*\}/g;
+  let fm: RegExpExecArray | null;
+  while ((fm = fn.exec(masked)) !== null) {
+    if (LOGIN_ONLY.test(fm[2].replace(/\s+/g, " ").trim())) loginHelpers.add(fm[1]);
+  }
   const out: RulesFinding[] = [];
   const re = /\ballow\s+([a-z,\s]+?)\s*(?::\s*if\s+([^;]*?))?\s*;/g;
   let m: RegExpExecArray | null;
@@ -37,7 +44,8 @@ export function findRulesIssues(text: string): RulesFinding[] {
       continue;
     }
     if (!methods.some((x) => WRITE_METHODS.has(x))) continue;
-    if (LOGIN_ONLY.test(cond)) {
+    const helperCall = cond.match(/^(\w+)\(\)$/);
+    if (LOGIN_ONLY.test(cond) || (helperCall !== null && loginHelpers.has(helperCall[1]))) {
       out.push({
         rule: "auth-only-write",
         line,
