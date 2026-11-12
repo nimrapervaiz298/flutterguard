@@ -1,0 +1,29 @@
+{
+    "project":  "e-school",
+    "labels":  [
+                   {
+                       "id":  "e82b07b2e225",
+                       "rule":  "perf/sequential-await-in-loop",
+                       "file":  "lib/core/services/ChatServices.dart",
+                       "line":  92,
+                       "verdict":  "true",
+                       "note":  "one profile read per parent reference (N+1), independent; list is small in practice"
+                   },
+                   {
+                       "id":  "d5f5cfaba102",
+                       "rule":  "perf/sequential-await-in-loop",
+                       "file":  "lib/core/services/ProfileServices.dart",
+                       "line":  166,
+                       "verdict":  "true",
+                       "note":  "one profile read per child id (N+1), independent; list is small in practice"
+                   },
+                   {
+                       "id":  "32acb7a22010",
+                       "rule":  "perf/sequential-await-in-loop",
+                       "file":  "lib/core/viewmodel/QuizStateModel.dart",
+                       "line":  94,
+                       "verdict":  "false",
+                       "note":  "awaits a PageController animation per page, no I/O, order matters"
+                   }
+               ]
+}

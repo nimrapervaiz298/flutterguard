@@ -12,5 +12,6 @@
   { "name": "timy",             "dir": "real-world/timy",             "labels": "timy.labels.json",            "tuned": false },
   { "name": "starter-arch",     "dir": "real-world/starter-arch",     "labels": "starter-arch.labels.json",    "tuned": false },
   { "name": "twitter-clone",    "dir": "real-world/twitter-clone",    "labels": "twitter-clone.labels.json",   "tuned": false },
-  { "name": "pinball",          "dir": "real-world/pinball",          "labels": "pinball.labels.json",         "tuned": false }
+  { "name": "pinball",          "dir": "real-world/pinball",          "labels": "pinball.labels.json",         "tuned": false },
+  { "name": "e-school",        "dir": "real-world/e-school",        "labels": "e-school.labels.json",       "tuned": false }
 ]
