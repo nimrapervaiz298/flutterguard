@@ -88,7 +88,7 @@ Precision means: of the findings a rule reported, how many were real problems. I
 |---|---|---|
 | `perf/firestore-unbounded-read` | 50% (6 true, 6 false, 2 unsure) | Cannot tell a small per-user list from a large global collection. |
 | `perf/sequential-await-in-loop` | unmeasured since the last change (55% before it: 6 true, 5 false, 1 unsure) | Loops over `limit(<number>)` or documentId-equality queries are now skipped. That change was written from 2 false alarms in one project, so precision on new projects is unmeasured. Most true labels are one pattern (one independent read or write per item). |
-| `perf/firestore-query-without-limit` | 0 of 1 labelled (0 true labels exist) | Skips queries that only use `isEqualTo`. That change was made after seeing 4 false alarms in 4 projects, so its precision on new projects is unmeasured. |
+| `perf/firestore-query-without-limit` | 1 true, 1 false (too few labels for a percentage) | Skips queries that only use `isEqualTo`. That change was made after seeing 4 false alarms in 4 projects. The one true label is a prefix search with two range filters in a project the rule had not seen. The one false label is a dead-code method. |
 | `secrets/hardcoded-secret` | 0 of 2 (1 unsure) | Only 3 labels. Flagged a vendored Firebase JS file and a class of UI test keys. |
 | `bloat/long-method`, `secrets/firebase-config-key` | not measured | |
 | `firestore-rules/*` | not measured | 5 findings in 8 rules files. `auth-only-write`: 3 findings, all true, 2 of them in the project the rule was written from. `open-access`: 2 findings, 1 true (in the project the fix was written from) and 1 false (an intentionally public catalog). 5 files had no findings; recall unknown. |
