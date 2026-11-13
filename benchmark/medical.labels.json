@@ -1,0 +1,29 @@
+{
+    "project":  "medical",
+    "labels":  [
+                   {
+                       "id":  "c9d23083e647",
+                       "rule":  "perf/firestore-query-without-limit",
+                       "file":  "lib/database.dart",
+                       "line":  39,
+                       "verdict":  "true",
+                       "note":  "prefix search with two range filters on lastName, no limit; a short search string matches many doctors"
+                   },
+                   {
+                       "id":  "f10dbffd5bbc",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/database.dart",
+                       "line":  6,
+                       "verdict":  "true",
+                       "note":  "whole global doctors catalog ordered by rank, no limit; a paginated variant exists in the same file"
+                   },
+                   {
+                       "id":  "03e839dc5d08",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/database.dart",
+                       "line":  60,
+                       "verdict":  "false",
+                       "note":  "small lookup list of specialties, whole list is needed for a picker (size not verified)"
+                   }
+               ]
+}

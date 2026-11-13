@@ -12,13 +12,13 @@
       "unsure": 0
     },
     "perf/firestore-query-without-limit": {
-      "tp": 0,
+      "tp": 1,
       "fp": 1,
       "unsure": 0
     },
     "perf/firestore-unbounded-read": {
-      "tp": 9,
-      "fp": 6,
+      "tp": 10,
+      "fp": 7,
       "unsure": 2
     },
     "perf/foreach-async-not-awaited": {
