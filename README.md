@@ -121,7 +121,7 @@ npx tsx src/index.ts bench score report.json benchmark/myproject.labels.json
 - The secrets check does not skip vendored or minified files.
 - A Firestore read through a variable (for example `final ref = collection(path); await ref.get()`) is not detected.
 - `firestore-rules` only understands single-statement `allow` lines, and treats a helper function as login-only only if its whole body is a login check.
-- `firestore-rules` does not look at `match` scope, so a public read of a whole database and a public read of a small catalog are flagged the same way. It also does not understand multi-line conditions.
+- `firestore-rules` does not look at `match` scope, so a public read of a whole database and a public read of a small catalog are flagged the same way. Since the last change, `open-access` is reported as high severity under a recursive wildcard (`{document=**}`) and as low severity under a specific collection. The scope is found by counting braces, which is a heuristic, not a parser. That change was written from two projects, so it is not measured on new ones. The rule does not understand multi-line conditions.
 - Only Dart and Flutter are supported so far.
 
 ## Tests
