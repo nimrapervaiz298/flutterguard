@@ -82,16 +82,16 @@ A check that was skipped on purpose (`--no-analyze`) or does not apply (not a Fl
 
 ## Accuracy
 
-Precision means: of the findings a rule reported, how many were real problems. It was measured by reading the code behind each finding by hand and labelling it true, false or unsure, on 14 open-source Flutter projects. "Untuned" means the project was not used to write or change the rule.
+Precision means: of the findings a rule reported, how many were real problems. It was measured by reading the code behind each finding by hand and labelling it true, false or unsure, on 20 open-source Flutter projects. "Untuned" means the project was not used to write or change the rule.
 
 | Rule | Untuned precision | Notes |
 |---|---|---|
-| `perf/firestore-unbounded-read` | 50% (6 true, 6 false, 2 unsure) | Cannot tell a small per-user list from a large global collection. |
-| `perf/sequential-await-in-loop` | unmeasured since the last change (55% before it: 6 true, 5 false, 1 unsure) | Loops over `limit(<number>)` or documentId-equality queries are now skipped. That change was written from 2 false alarms in one project, so precision on new projects is unmeasured. Most true labels are one pattern (one independent read or write per item). |
-| `perf/firestore-query-without-limit` | 1 true, 1 false (too few labels for a percentage) | Skips queries that only use `isEqualTo`. That change was made after seeing 4 false alarms in 4 projects. The one true label is a prefix search with two range filters in a project the rule had not seen. The one false label is a dead-code method. |
+| `perf/firestore-unbounded-read` | 57% (16 true, 12 false, 4 unsure) | Cannot tell a small per-user list from a large global collection. 14 of the true labels are realtime listeners on chat or post collections, which are easy to call true, so this is not an improvement of the rule. Some false and unsure labels are guesses about collection size. |
+| `perf/sequential-await-in-loop` | 60% (9 true, 6 false, 1 unsure) | Loops over `limit(<number>)` or documentId-equality queries are skipped; that change was written from 2 false alarms in one project, so the number is mixed. Most true labels are one pattern (one independent read or write per item). |
+| `perf/firestore-query-without-limit` | 2 true, 2 false (too few labels for a percentage) | Skips queries that only use `isEqualTo`. That change was written after seeing 4 false alarms. |
 | `secrets/hardcoded-secret` | 0 of 2 (1 unsure) | Only 3 labels. Flagged a vendored Firebase JS file and a class of UI test keys. |
 | `bloat/long-method`, `secrets/firebase-config-key` | not measured | |
-| `firestore-rules/*` | not measured | 10 findings in 13 rules files. `auth-only-write`: 4 findings, all true, 2 of them in the project the rule was written from. `open-access`: 6 findings, 1 true (in the project the fix was written from) and 5 false (all intentionally public: catalogs, public pages and reports, a write-only token collection). 6 files had no findings; recall unknown. In 4 new repos checked after the rule was written: `auth-only-write` 1 of 1 true, `open-access` 0 of 3 true. Too few findings for percentages. |
+| `firestore-rules/*` | `auth-only-write`: 4 true, 0 false. `open-access`: 1 true, 5 false (too few labels for percentages) | In the benchmark projects. 2 of the 4 `auth-only-write` findings are in the project the rule was written from, and the other labels were made after the findings had been seen. All 5 false `open-access` findings are intentionally public rules (catalogs, public pages, a write-only token collection); the rule cannot read intent. Recall unknown. |
 | Known bugs caught | 1 of 2 | The `forEach` bug is caught by a rule written from that same project, so this says nothing about recall elsewhere. The wrong-document update (`docs.first`) is still missed. |
 | `perf/foreach-async-not-awaited` | 1 of 1, not a meaningful number | One example in 14 projects, the project the rule was written from. Precision and recall on other projects are unmeasured. |
 
