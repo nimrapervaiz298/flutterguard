@@ -113,10 +113,14 @@ function firestoreReads(masked: string, original: string): PerfFinding[] {
   let m: RegExpExecArray | null;
   while ((m = re.exec(masked)) !== null) {
     const end = masked.indexOf(";", m.index);
-    const seg = masked.slice(m.index, end === -1 ? undefined : end);
+    let seg = masked.slice(m.index, end === -1 ? undefined : end);
+    // a realtime listener: only the part up to .snapshots( belongs to this query
+    const snapAt = seg.search(/\.snapshots\s*\(/);
+    const getAt = seg.search(/\.get\s*\(\s*\)/);
+    if (snapAt !== -1 && (getAt === -1 || snapAt < getAt)) seg = seg.slice(0, snapAt);
     // a later .collection( in the same statement is handled by its own match
     if (seg.slice(1).search(/\.collection\s*\(/) !== -1) continue;
-    if (!/\.get\s*\(\s*\)/.test(seg)) continue;
+    if (snapAt === -1 && getAt === -1) continue;
     if (CAPS_RESULT.test(seg)) continue;
     // masking keeps offsets, so the real collection name is read from the original text
     const name = original.slice(m.index).match(/^\.collection\s*\(\s*['"]([^'"]+)['"]/)?.[1];
