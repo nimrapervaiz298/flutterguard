@@ -86,7 +86,7 @@ Precision means: of the findings a rule reported, how many were real problems. I
 
 | Rule | Untuned precision | Notes |
 |---|---|---|
-| `perf/firestore-unbounded-read` | 57% (16 true, 12 false, 4 unsure) | Cannot tell a small per-user list from a large global collection. 14 of the true labels are realtime listeners on chat or post collections, which are easy to call true, so this is not an improvement of the rule. Some false and unsure labels are guesses about collection size. |
+| `perf/firestore-unbounded-read` | 57% (16 true, 12 false, 4 unsure) | Cannot tell a small per-user list from a large global collection. At least 10 of the true labels are realtime listeners on chat or post collections, which are easy to call true, so this is not an improvement of the rule. Some false and unsure labels are guesses about collection size. |
 | `perf/sequential-await-in-loop` | 60% (9 true, 6 false, 1 unsure) | Loops over `limit(<number>)` or documentId-equality queries are skipped; that change was written from 2 false alarms in one project, so the number is mixed. Most true labels are one pattern (one independent read or write per item). |
 | `perf/firestore-query-without-limit` | 2 true, 2 false (too few labels for a percentage) | Skips queries that only use `isEqualTo`. That change was written after seeing 4 false alarms. |
 | `secrets/hardcoded-secret` | 0 of 2 (1 unsure) | Only 3 labels. Flagged a vendored Firebase JS file and a class of UI test keys. |
