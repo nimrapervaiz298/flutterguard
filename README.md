@@ -91,7 +91,7 @@ Precision means: of the findings a rule reported, how many were real problems. I
 | `perf/firestore-query-without-limit` | 1 true, 1 false (too few labels for a percentage) | Skips queries that only use `isEqualTo`. That change was made after seeing 4 false alarms in 4 projects. The one true label is a prefix search with two range filters in a project the rule had not seen. The one false label is a dead-code method. |
 | `secrets/hardcoded-secret` | 0 of 2 (1 unsure) | Only 3 labels. Flagged a vendored Firebase JS file and a class of UI test keys. |
 | `bloat/long-method`, `secrets/firebase-config-key` | not measured | |
-| `firestore-rules/*` | not measured | 6 findings in 9 rules files. `auth-only-write`: 3 findings, all true, 2 of them in the project the rule was written from. `open-access`: 3 findings, 1 true (in the project the fix was written from) and 2 false (both intentionally open, documented by the author: a public catalog and a write-only token collection). 5 files had no findings; recall unknown. |
+| `firestore-rules/*` | not measured | 10 findings in 13 rules files. `auth-only-write`: 4 findings, all true, 2 of them in the project the rule was written from. `open-access`: 6 findings, 1 true (in the project the fix was written from) and 5 false (all intentionally public: catalogs, public pages and reports, a write-only token collection). 6 files had no findings; recall unknown. In 4 new repos checked after the rule was written: `auth-only-write` 1 of 1 true, `open-access` 0 of 3 true. Too few findings for percentages. |
 | Known bugs caught | 1 of 2 | The `forEach` bug is caught by a rule written from that same project, so this says nothing about recall elsewhere. The wrong-document update (`docs.first`) is still missed. |
 | `perf/foreach-async-not-awaited` | 1 of 1, not a meaningful number | One example in 14 projects, the project the rule was written from. Precision and recall on other projects are unmeasured. |
 
@@ -121,7 +121,7 @@ npx tsx src/index.ts bench score report.json benchmark/myproject.labels.json
 - The secrets check does not skip vendored or minified files.
 - A Firestore read through a variable (for example `final ref = collection(path); await ref.get()`) is not detected.
 - `firestore-rules` only understands single-statement `allow` lines, and treats a helper function as login-only only if its whole body is a login check.
-- `firestore-rules` only looks at `match` scope roughly: `open-access` is reported as high severity under a recursive wildcard (`{document=**}`) and as low severity under a specific collection. The scope is found by counting braces, which is a heuristic, not a parser. That change was written from two projects, so it is not measured on new ones. The rule does not understand multi-line conditions.
+- `firestore-rules` only looks at `match` scope roughly: `open-access` is reported as high severity under a recursive wildcard (`{document=**}`) and as low severity under a specific collection. The scope is found by counting braces, which is a heuristic, not a parser. A public write, or a public read under a wildcard, is high; only a public read on a specific collection is low. The scope change was written from two projects; on 3 new projects it gave 3 low findings, all intentionally public. The rule cannot tell a public catalog from private data (`/users`, `/messages`), `match ... {` must be on one line, and it does not understand multi-line conditions.
 - Only Dart and Flutter are supported so far.
 
 ## Tests
