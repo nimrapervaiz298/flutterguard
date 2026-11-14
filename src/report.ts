@@ -313,10 +313,11 @@ export function fromRules(
   const location = { file: toPosix(path.relative(projectDir, file)), line: f.line };
   const open = f.rule === "open-access";
   const wide = f.scope === "wide";
+  const writes = f.methods.some((m) => ["write", "create", "update", "delete"].includes(m));
   return makeDiagnostic({
     rule: `firestore-rules/${f.rule}`,
     category: "security",
-    severity: open ? (wide ? "high" : "low") : "medium",
+    severity: open ? (wide || writes ? "high" : "low") : "medium",
     confidence: open ? "medium" : "low", // some apps keep login-only rules on purpose
     source: "static",
     message: open ? "Firestore rule allows everyone" : "Firestore rule only checks that the user is logged in",
