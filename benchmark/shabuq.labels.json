@@ -1,0 +1,93 @@
+{
+    "project":  "shabuq",
+    "labels":  [
+                   {
+                       "id":  "637afe1d3376",
+                       "rule":  "firestore-rules/open-access",
+                       "file":  "firestore.rules",
+                       "line":  712,
+                       "verdict":  "false",
+                       "note":  "help, terms and privacy pages, public read intended; write limited to isSuperAdmin()"
+                   },
+                   {
+                       "id":  "62fb6308a716",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/screens/profile_screen.dart",
+                       "line":  178,
+                       "verdict":  "false",
+                       "note":  "per-user coupons subcollection, small list"
+                   },
+                   {
+                       "id":  "9c658cb81698",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/screens/promotions_screen.dart",
+                       "line":  59,
+                       "verdict":  "false",
+                       "note":  "per-user coupons subcollection, small list"
+                   },
+                   {
+                       "id":  "6093f44f80f6",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/services/account_service.dart",
+                       "line":  33,
+                       "verdict":  "false",
+                       "note":  "account deletion needs every coupon of this one user (batch delete)"
+                   },
+                   {
+                       "id":  "f4fcadf89035",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/services/admin_service.dart",
+                       "line":  72,
+                       "verdict":  "true",
+                       "note":  "realtime listener on the whole users collection, no limit"
+                   },
+                   {
+                       "id":  "6bf58aae9ca7",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/services/admin_service.dart",
+                       "line":  76,
+                       "verdict":  "false",
+                       "note":  "admins list is small (staff); size not verified"
+                   },
+                   {
+                       "id":  "a0611a8f1f79",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/services/promo_code_service.dart",
+                       "line":  10,
+                       "verdict":  "unsure",
+                       "note":  "promo codes: admin screen needs all of them; size not verified"
+                   },
+                   {
+                       "id":  "15ad7de8f8b3",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/services/shop_service.dart",
+                       "line":  14,
+                       "verdict":  "unsure",
+                       "note":  "shops list size depends on the deployment; not verified"
+                   },
+                   {
+                       "id":  "37bd1623b692",
+                       "rule":  "perf/sequential-await-in-loop",
+                       "file":  "lib/screens/banner_admin.dart",
+                       "line":  73,
+                       "verdict":  "false",
+                       "note":  "fixed 2-item list, order of saves may matter"
+                   },
+                   {
+                       "id":  "aabc16bf0323",
+                       "rule":  "perf/sequential-await-in-loop",
+                       "file":  "lib/services/admin_service.dart",
+                       "line":  278,
+                       "verdict":  "true",
+                       "note":  "closeQueue per queue id, looks independent; closeQueue body not read, weak label"
+                   },
+                   {
+                       "id":  "7c30ff685a20",
+                       "rule":  "perf/sequential-await-in-loop",
+                       "file":  "lib/services/coupon_service.dart",
+                       "line":  88,
+                       "verdict":  "false",
+                       "note":  "retry loop with 5 attempts, iterations are not independent"
+                   }
+               ]
+}

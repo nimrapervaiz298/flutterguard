@@ -1,0 +1,13 @@
+{
+    "project":  "notes-app",
+    "labels":  [
+                   {
+                       "id":  "af5f5f0a02b2",
+                       "rule":  "firestore-rules/auth-only-write",
+                       "file":  "backend/firestore.rules",
+                       "line":  7,
+                       "verdict":  "true",
+                       "note":  "match /{document=**}: any signed-in user can write every document; no ownership check. Labelled after the rule was written, so not a hold-out"
+                   }
+               ]
+}
