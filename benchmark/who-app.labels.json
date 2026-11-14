@@ -1,0 +1,13 @@
+{
+    "project":  "who-app",
+    "labels":  [
+                   {
+                       "id":  "4459abbc1235",
+                       "rule":  "firestore-rules/open-access",
+                       "file":  "server/firestore.rules",
+                       "line":  18,
+                       "verdict":  "false",
+                       "note":  "write-only Client collection (FCM tokens) is intentionally open; author documents why (unguessable random client id); everything else denied by a wildcard \u0027if false\u0027"
+                   }
+               ]
+}

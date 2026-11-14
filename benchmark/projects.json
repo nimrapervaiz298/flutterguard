@@ -14,5 +14,6 @@
   { "name": "twitter-clone",    "dir": "real-world/twitter-clone",    "labels": "twitter-clone.labels.json",   "tuned": false },
   { "name": "pinball",          "dir": "real-world/pinball",          "labels": "pinball.labels.json",         "tuned": false },
   { "name": "e-school",        "dir": "real-world/e-school",        "labels": "e-school.labels.json",       "tuned": false },
-  { "name": "medical",         "dir": "real-world/medical",         "labels": "medical.labels.json",        "tuned": false }
+  { "name": "medical",         "dir": "real-world/medical",         "labels": "medical.labels.json",        "tuned": false },
+  { "name": "who-app",         "dir": "real-world/who-app",         "labels": "who-app.labels.json",        "tuned": false }
 ]
