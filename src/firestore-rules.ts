@@ -73,3 +73,67 @@ export function findRulesIssues(text: string): RulesFinding[] {
   }
   return out;
 }
+
+export type CollectionRule = {
+  collection: string;
+  line: number;
+  loginOnlyWrite: boolean;
+};
+
+function closeOf(text: string, openIdx: number): number {
+  let depth = 0;
+  for (let i = openIdx; i < text.length; i++) {
+    if (text[i] === "{") depth++;
+    else if (text[i] === "}") {
+      depth--;
+      if (depth === 0) return i;
+    }
+  }
+  return -1;
+}
+
+// Top-level collections: match /name/{id} directly inside match /databases/{db}/documents.
+// Nested matches are cut out of the body, so their allow lines are not attributed to the parent.
+export function collectionRules(text: string): CollectionRule[] {
+  const masked = maskComments(text);
+  const out: CollectionRule[] = [];
+  const dbRe = /match[ \t]+\/databases\/\{[^}\n]*\}\/documents[ \t]*\{/;
+  const db = dbRe.exec(masked);
+  if (!db) return out;
+  const dbOpen = db.index + db[0].length - 1;
+  const dbClose = closeOf(masked, dbOpen);
+  if (dbClose === -1) return out;
+  const inner = masked.slice(dbOpen + 1, dbClose);
+  const base = dbOpen + 1;
+
+  const re = /match[ \t]+\/([A-Za-z0-9_]+)\/\{[A-Za-z0-9_]+\}[ \t]*\{/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(inner)) !== null) {
+    const open = m.index + m[0].length - 1;
+    const close = closeOf(inner, open);
+    if (close === -1) continue;
+    let body = inner.slice(open + 1, close);
+    // cut nested match blocks out of the body
+    const nested = /match[ \t]+[^{\n]*\{/g;
+    let n: RegExpExecArray | null;
+    while ((n = nested.exec(body)) !== null) {
+      const nOpen = n.index + n[0].length - 1;
+      const nClose = closeOf(body, nOpen);
+      if (nClose === -1) break;
+      body = body.slice(0, n.index) + " ".repeat(nClose - n.index + 1) + body.slice(nClose + 1);
+      nested.lastIndex = n.index;
+    }
+    let loginOnlyWrite = false;
+    const allow = /\ballow\s+([a-z,\s]+?)\s*:\s*if\s+([^;]*?)\s*;/g;
+    let a: RegExpExecArray | null;
+    while ((a = allow.exec(body)) !== null) {
+      const methods = a[1].split(",").map((s) => s.trim());
+      const cond = a[2].replace(/\s+/g, " ").trim();
+      if (methods.some((x) => WRITE_METHODS.has(x)) && LOGIN_ONLY.test(cond)) loginOnlyWrite = true;
+    }
+    const line = masked.slice(0, base + m.index).split("\n").length;
+    out.push({ collection: m[1], line, loginOnlyWrite });
+    re.lastIndex = close + 1;
+  }
+  return out;
+}
