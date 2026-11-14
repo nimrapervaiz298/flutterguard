@@ -24,6 +24,38 @@
                        "line":  137,
                        "verdict":  "true",
                        "note":  "one setData per invited member, independent documents, could run in parallel with Future.wait"
+                   },
+                   {
+                       "id":  "afa42e883cdb",
+                       "rule":  "perf/firestore-query-without-limit",
+                       "file":  "lib/data/group_repository.dart",
+                       "line":  24,
+                       "verdict":  "false",
+                       "note":  "arrayContains userId: only the groups of one user, small result"
+                   },
+                   {
+                       "id":  "0e635ced01a2",
+                       "rule":  "perf/firestore-query-without-limit",
+                       "file":  "lib/data/user_repository.dart",
+                       "line":  38,
+                       "verdict":  "false",
+                       "note":  "arrayContains groupId: only the members of one group, small result"
+                   },
+                   {
+                       "id":  "35e969ac2865",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/data/channel_repository.dart",
+                       "line":  43,
+                       "verdict":  "false",
+                       "note":  "channels of one group in a realtime listener: a small set by design (judgement call)"
+                   },
+                   {
+                       "id":  "05cadac941a0",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/data/message_repository.dart",
+                       "line":  39,
+                       "verdict":  "true",
+                       "note":  "messages of a channel in a realtime listener, orderBy but no limit"
                    }
                ]
 }

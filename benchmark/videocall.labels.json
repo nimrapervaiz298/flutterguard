@@ -32,6 +32,22 @@
                        "line":  18,
                        "verdict":  "unsure",
                        "note":  "agora-style token (prefix 006, 81 chars) in a constants file; comment says to replace it, so it looks like a sample value; validity unknown"
+                   },
+                   {
+                       "id":  "0c1532204a57",
+                       "rule":  "perf/firestore-query-without-limit",
+                       "file":  "lib/data/api/home_api.dart",
+                       "line":  16,
+                       "verdict":  "true",
+                       "note":  "used from HomeCubit at start-up; isNotEqualTo alone returns every user except the current one"
+                   },
+                   {
+                       "id":  "c4a0b0e9a252",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/data/api/home_api.dart",
+                       "line":  20,
+                       "verdict":  "true",
+                       "note":  "used from HomeCubit at start-up; all calls of all users in a realtime listener"
                    }
                ]
 }

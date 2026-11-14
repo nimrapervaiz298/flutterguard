@@ -40,6 +40,14 @@
                        "line":  31,
                        "verdict":  "true",
                        "note":  "5 independent document reads, could run in parallel"
+                   },
+                   {
+                       "id":  "094aed49c401",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/screens/admin/notification/SupportMessages_screen.dart",
+                       "line":  22,
+                       "verdict":  "true",
+                       "note":  "support messages listener with no limit (admin screen)"
                    }
                ]
 }

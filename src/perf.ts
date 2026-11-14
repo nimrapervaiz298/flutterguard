@@ -104,7 +104,9 @@ const CAPS_RESULT = /\.(doc|document|limit|limitToLast|count)\s*\(/;
 // where() filters, but does not cap the number of documents that come back.
 const FILTERS = /\.where\s*\(/;
 // Operators other than isEqualTo. A query that only uses isEqualTo returns few documents in practice.
-const NON_EQUALITY = /\b(isNotEqualTo|isLessThan|isLessThanOrEqualTo|isGreaterThan|isGreaterThanOrEqualTo|arrayContains|arrayContainsAny|whereIn|whereNotIn|isNull)\b/;
+const NON_EQUALITY = /\b(isNotEqualTo|isLessThan|isLessThanOrEqualTo|isGreaterThan|isGreaterThanOrEqualTo|whereNotIn|isNull)\b/;
+// arrayContains and whereIn pick out a small slice. A query that has one of them is not reported. isEqualTo does not count here: a range filter next to it can still return many documents.
+const SELECTIVE = /\b(arrayContains|arrayContainsAny|whereIn)\b/;
 
 // Rules 1 and 2: reading a whole collection, or a filtered query with no limit.
 function firestoreReads(masked: string, original: string): PerfFinding[] {
@@ -125,7 +127,7 @@ function firestoreReads(masked: string, original: string): PerfFinding[] {
     // masking keeps offsets, so the real collection name is read from the original text
     const name = original.slice(m.index).match(/^\.collection\s*\(\s*['"]([^'"]+)['"]/)?.[1];
     if (FILTERS.test(seg)) {
-      if (!NON_EQUALITY.test(seg)) continue; // only isEqualTo filters: small result, not reported
+      if (!NON_EQUALITY.test(seg) || SELECTIVE.test(seg)) continue; // only isEqualTo filters: small result, not reported
       out.push({
         rule: "firestore-query-without-limit",
         severity: "info",

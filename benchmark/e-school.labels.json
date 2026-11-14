@@ -40,6 +40,14 @@
                        "line":  94,
                        "verdict":  "false",
                        "note":  "awaits a PageController animation per page, no I/O, order matters"
+                   },
+                   {
+                       "id":  "ed0563c3ece2",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/core/services/ChatServices.dart",
+                       "line":  122,
+                       "verdict":  "true",
+                       "note":  "chat messages stream, orderBy but no limit"
                    }
                ]
 }

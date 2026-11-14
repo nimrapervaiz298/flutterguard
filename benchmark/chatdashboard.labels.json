@@ -16,6 +16,22 @@
                        "line":  65,
                        "verdict":  "unsure",
                        "note":  "all messages of one chat; common for chat apps but unbounded"
+                   },
+                   {
+                       "id":  "266b831e6811",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/services/chat_service.dart",
+                       "line":  76,
+                       "verdict":  "true",
+                       "note":  "all chat sessions in a realtime listener, no limit"
+                   },
+                   {
+                       "id":  "9f6968f91b73",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/services/chat_service.dart",
+                       "line":  91,
+                       "verdict":  "true",
+                       "note":  "all messages of a session in a realtime listener, no limit"
                    }
                ]
 }

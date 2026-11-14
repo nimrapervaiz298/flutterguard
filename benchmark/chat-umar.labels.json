@@ -1,13 +1,29 @@
 {
-  "project": "chat-umar",
-  "labels": [
-    {
-      "id": "999b7daa9bf9",
-      "rule": "perf/firestore-query-without-limit",
-      "file": "lib/screens/search_screen.dart",
-      "line": 32,
-      "verdict": "false",
-      "note": "two participant equality filters for one pair of users; code uses docs[0]"
-    }
-  ]
+    "project":  "chat-umar",
+    "labels":  [
+                   {
+                       "id":  "999b7daa9bf9",
+                       "rule":  "perf/firestore-query-without-limit",
+                       "file":  "lib/screens/search_screen.dart",
+                       "line":  32,
+                       "verdict":  "false",
+                       "note":  "two participant equality filters for one pair of users; code uses docs[0]"
+                   },
+                   {
+                       "id":  "aa94f03fc53b",
+                       "rule":  "perf/firestore-query-without-limit",
+                       "file":  "lib/screens/search_screen.dart",
+                       "line":  123,
+                       "verdict":  "false",
+                       "note":  "equality filter on userName plus isNotEqualTo: small result, the rule counted it as a non-equality query"
+                   },
+                   {
+                       "id":  "3cba967da7a5",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/screens/chat_room.dart",
+                       "line":  154,
+                       "verdict":  "true",
+                       "note":  "messages of one chat room in a realtime listener, orderBy but no limit"
+                   }
+               ]
 }

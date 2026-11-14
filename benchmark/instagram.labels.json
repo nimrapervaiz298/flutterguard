@@ -40,6 +40,22 @@
                        "line":  67,
                        "verdict":  "false",
                        "note":  "documentId equality + limit(1), at most 1 doc"
+                   },
+                   {
+                       "id":  "7dcafec20edc",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/state/posts/providers/all_post_provider.dart",
+                       "line":  17,
+                       "verdict":  "true",
+                       "note":  "all posts in a realtime listener, no limit"
+                   },
+                   {
+                       "id":  "d68efe95a1c6",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/state/posts/providers/posts_by_search_term_provider.dart",
+                       "line":  19,
+                       "verdict":  "true",
+                       "note":  "all posts in a realtime listener, search is done on the client"
                    }
                ]
 }
