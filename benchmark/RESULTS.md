@@ -8,13 +8,13 @@ Projects measured: fyp, flutter-samples, chatdashboard, easyshop, collections, t
 |---|---|---|---|---|---|
 | firestore-rules/auth-only-write | 3 | 0 | 0 | 100% (3 of 3) (few labels) | 100% (3 of 3) |
 | firestore-rules/open-access | 1 | 2 | 0 | 33% (1 of 3) (few labels) | 50% (1 of 2) |
-| perf/firestore-query-without-limit | 1 | 1 | 0 | 50% (1 of 2) (few labels) | 50% (1 of 2) |
-| perf/firestore-unbounded-read | 10 | 7 | 2 | 59% (10 of 17) | 50% (7 of 14) |
+| perf/firestore-query-without-limit | 2 | 2 | 0 | 50% (2 of 4) (few labels) | 50% (2 of 4) |
+| perf/firestore-unbounded-read | 19 | 8 | 2 | 70% (19 of 27) | 65% (15 of 23) |
 | perf/foreach-async-not-awaited | 1 | 0 | 0 | 100% (1 of 1) (few labels) | 100% (1 of 1) |
 | perf/sequential-await-in-loop | 9 | 4 | 2 | 69% (9 of 13) | 67% (8 of 12) |
 | secrets/hardcoded-secret | 0 | 2 | 1 | 0% (0 of 2) (few labels) | 0% (0 of 2) |
 
-- Labelled false alarms that no longer appear: 17
+- Labelled false alarms that no longer appear: 19
 - Labelled real problems that are no longer found: 0
 - Findings still waiting for a label: 0
 - Known bugs detected: 1 of 2
