@@ -91,7 +91,7 @@ Precision means: of the findings a rule reported, how many were real problems. I
 | `perf/firestore-query-without-limit` | 1 true, 1 false (too few labels for a percentage) | Skips queries that only use `isEqualTo`. That change was made after seeing 4 false alarms in 4 projects. The one true label is a prefix search with two range filters in a project the rule had not seen. The one false label is a dead-code method. |
 | `secrets/hardcoded-secret` | 0 of 2 (1 unsure) | Only 3 labels. Flagged a vendored Firebase JS file and a class of UI test keys. |
 | `bloat/long-method`, `secrets/firebase-config-key` | not measured | |
-| `firestore-rules/*` | not measured | 5 findings in 8 rules files. `auth-only-write`: 3 findings, all true, 2 of them in the project the rule was written from. `open-access`: 2 findings, 1 true (in the project the fix was written from) and 1 false (an intentionally public catalog). 5 files had no findings; recall unknown. |
+| `firestore-rules/*` | not measured | 6 findings in 9 rules files. `auth-only-write`: 3 findings, all true, 2 of them in the project the rule was written from. `open-access`: 3 findings, 1 true (in the project the fix was written from) and 2 false (both intentionally open, documented by the author: a public catalog and a write-only token collection). 5 files had no findings; recall unknown. |
 | Known bugs caught | 1 of 2 | The `forEach` bug is caught by a rule written from that same project, so this says nothing about recall elsewhere. The wrong-document update (`docs.first`) is still missed. |
 | `perf/foreach-async-not-awaited` | 1 of 1, not a meaningful number | One example in 14 projects, the project the rule was written from. Precision and recall on other projects are unmeasured. |
 
