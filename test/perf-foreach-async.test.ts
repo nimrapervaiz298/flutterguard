@@ -38,3 +38,8 @@ test("a commented-out forEach is ignored", () => {
   const code = `// items.forEach((x) async { await save(x); });`;
   assert.deepEqual(rules(code), []);
 });
+
+test("Future.forEach with an async closure is not flagged: it does wait", () => {
+  const code = `await Future.forEach(items, (x) async { await save(x); });`;
+  assert.deepEqual(rules(code), []);
+});
