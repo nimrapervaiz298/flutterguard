@@ -51,6 +51,7 @@ export type TextSecretHit = { level: "ALERT" | "INFO"; name: string; line: numbe
 export type SecretHit = TextSecretHit & { file: string; preview: string };
 
 export function shouldScanFile(file: string): boolean {
+  if (/(^|[\\/])web[\\/]__[\\/]firebase[\\/]/.test(file)) return false; // vendored Firebase Hosting JS
   return SCAN_EXT.has(path.extname(file)) || path.basename(file) === ".env";
 }
 
@@ -60,6 +61,7 @@ export function findSecretsInText(text: string, fileName: string): TextSecretHit
   const inTest = isTestFile(fileName);
   const hits: TextSecretHit[] = [];
   text.split("\n").forEach((line, i) => {
+    if (line.length > 1000) return; // minified or generated line, not hand-written config
     for (const [name, re] of KEY_PATTERNS) {
       if (!re.test(line)) continue;
       const isFirebase = FIREBASE_FILES.has(base) && name === "Google API key";
