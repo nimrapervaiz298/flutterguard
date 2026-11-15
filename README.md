@@ -74,6 +74,12 @@ A check that was skipped on purpose (`--no-analyze`) or does not apply (not a Fl
 
 `report --json` prints one JSON object: project, scan statistics (files scanned and skipped), a status for every check (`ok`, `skipped` or `failed`), and a list of diagnostics. Each diagnostic has a stable `id` that does not change when lines shift, plus `rule`, `category`, `severity`, `confidence`, `location`, `evidence`, `why` and `fix`.
 
+## Confidence tiers
+
+The text report groups findings by confidence: **Confirmed** (a fixed, recognisable key format), **Likely**, and **Hints** (heuristics that are often false alarms). Only findings of medium severity or higher are listed in the text report; the JSON report has everything.
+
+Confidence is not a measured precision. `high` on a secret means the key has a recognisable format; no real key of these formats was found in the 20 benchmark projects. `unbounded-read` is a hint because its measured precision is only about 55-65%. Confidence does not change the exit code: `--fail-on` looks at severity only.
+
 ## Safety
 
 - The scanner never reads outside the project folder and does not follow symlinks.
