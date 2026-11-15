@@ -8,7 +8,7 @@ A command-line tool that scans a Flutter/Dart project for security, reliability 
 
 | Check | What it looks for | How sure it is |
 |---|---|---|
-| `secrets` | Hardcoded API keys, AWS keys, private keys, passwords. Firebase client config keys are reported as `info` only. Placeholder values and generic secrets in test files are ignored. | Pattern match (medium) |
+| `secrets` | Hardcoded API keys, AWS keys, private keys, Stripe, GitHub and Slack tokens, and generic `name = value` passwords. Firebase client config keys are reported as `info` only. Placeholder values and generic secrets in test files are ignored. | Fixed-format keys: high confidence. Generic `name = value`: medium. Not measured on real keys |
 | `bloat` | Very long methods (80+ lines), estimated by counting braces. It is a heuristic, not a parser. Top-level functions are not reported. | Estimate (medium) |
 | `analyze` | Runs `flutter analyze` and sorts its output into error, bug-risk, migration, cleanup and style. | The official Dart analyzer (high) |
 | `perf` | Firestore reads of a whole collection (`firestore-unbounded-read`), queries with `where()` but no `limit()` (`firestore-query-without-limit`), `forEach` with an async closure (`foreach-async-not-awaited`), and `await` inside a loop (`sequential-await-in-loop`). Test, tool and script folders are skipped. | Heuristic (medium to low) |
