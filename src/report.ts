@@ -260,7 +260,7 @@ export function fromPerf(
       rule: "perf/firestore-unbounded-read",
       category: "performance",
       severity: "medium",
-      confidence: "medium",
+      confidence: "low", // measured precision is only about 55-65%: a hint, not a verdict
       source: "static",
       message: "Reads a whole Firestore collection with no limit() or where()",
       location,
