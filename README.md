@@ -116,9 +116,9 @@ npx tsx src/index.ts bench score report.json benchmark/myproject.labels.json
 ## Known limits
 
 - Roughly half of the performance findings were false alarms in our measurements. Check each one before acting.
-- A secret whose value is on the line after its name is not detected.
+- The secrets check knows only Google API keys, AWS access keys, private key headers and generic `name = value` secrets. It does not detect Stripe, GitHub, Slack or JWT tokens, and a secret whose value is on the line after its name is not detected. On a small author-made test set it caught all 12 examples of the formats it knows and 0 of 5 of these other formats.
 - `bloat` is estimated from braces and can be wrong on unusual syntax.
-- The secrets check does not skip vendored or minified files.
+- The secrets check skips `web/__/firebase/` and lines over 1000 characters, a rule written from one false alarm; other vendored folders are still scanned.
 - A Firestore read through a variable (for example `final ref = collection(path); await ref.get()`) is not detected.
 - `firestore-rules` only understands single-statement `allow` lines, and treats a helper function as login-only only if its whole body is a login check.
 - `firestore-rules` only looks at `match` scope roughly: `open-access` is reported as high severity under a recursive wildcard (`{document=**}`) and as low severity under a specific collection. The scope is found by counting braces, which is a heuristic, not a parser. A public write, or a public read under a wildcard, is high; only a public read on a specific collection is low. The scope change was written from two projects; on 3 new projects it gave 3 low findings, all intentionally public. The rule cannot tell a public catalog from private data (`/users`, `/messages`), `match ... {` must be on one line, and it does not understand multi-line conditions.
