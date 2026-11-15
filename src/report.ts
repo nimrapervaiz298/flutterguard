@@ -94,6 +94,13 @@ export function makeDiagnostic(input: DiagnosticInput): Diagnostic {
  *   1 = high or critical findings
  *   2 = a check (or the tool itself) failed, so the report is incomplete
  */
+/** Text-output tiers by confidence. Only medium and higher severity, at most 15 per tier. JSON and exit codes are not affected. */
+export function groupByConfidence(diagnostics: Diagnostic[]): { confirmed: Diagnostic[]; likely: Diagnostic[]; hints: Diagnostic[] } {
+  const shown = diagnostics.filter((d) => d.severity !== "info" && d.severity !== "low");
+  const pick = (c: string) => shown.filter((d) => d.confidence === c).slice(0, 15);
+  return { confirmed: pick("high"), likely: pick("medium"), hints: pick("low") };
+}
+
 const FAIL_ORDER: Severity[] = ["critical", "high", "medium", "low", "info"];
 
 export function exitCodeFor(report: Report, failOn: Severity = "high"): number {
@@ -491,16 +498,18 @@ export function registerReport(program: Command, deps: ReportDeps): void {
             .filter((c) => c.status === "skipped")
             .forEach((c) => console.log(`Check skipped: ${c.name} (${c.reason})`));
 
-          const top = report.diagnostics
-            .filter((d) => d.severity !== "info" && d.severity !== "low")
-            .slice(0, 15);
-          if (top.length) {
-            console.log("\nMost important:");
-            top.forEach((d) => {
+          const tiers = groupByConfidence(report.diagnostics);
+          const show = (title: string, items: Diagnostic[]) => {
+            if (!items.length) return;
+            console.log(`\n${title}:`);
+            items.forEach((d) => {
               const loc = d.location ? `${d.location.file}:${d.location.line}` : "";
               console.log(`  [${d.severity}/${d.confidence}] ${d.rule}  ${loc}`);
             });
-          }
+          };
+          show("Confirmed (fixed format, high confidence)", tiers.confirmed);
+          show("Likely", tiers.likely);
+          show("Hints (heuristics, often false alarms; see the Accuracy section of the README)", tiers.hints);
         }
 
         if (!FAIL_ORDER.includes(opts.failOn as Severity)) {
