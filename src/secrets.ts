@@ -6,6 +6,9 @@ const KEY_PATTERNS: [string, RegExp][] = [
   ["Google API key", /AIza[0-9A-Za-z_\-]{35}/],
   ["AWS access key", /AKIA[0-9A-Z]{16}/],
   ["Private key", /-----BEGIN (RSA |EC )?PRIVATE KEY-----/],
+  ["Stripe key", /\b[sr]k_live_[0-9A-Za-z]{20,}/],
+  ["GitHub token", /\b(?:gh[pousr]_[0-9A-Za-z]{30,}|github_pat_[0-9A-Za-z_]{30,})/],
+  ["Slack token", /\bxox[baprs]-[0-9A-Za-z-]{10,}/],
 ];
 
 // Generic "name = value" secrets: weaker evidence, so placeholders and test files are skipped.

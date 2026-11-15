@@ -16,6 +16,10 @@ const MUST_FLAG: [string, string, string][] = [
   ["generic token, json", "lib/x.json", '{"authToken": "x9Y8z7W6v5U4t3S2r1"}'],
   ["generic password", "lib/db.dart", 'static const dbPassword = "Zk39sdf82hsd9f";'],
   ["api_key python", "app/cfg.py", 'api_key = "m4N5b6V7c8X9z0L1k2J3"'],
+  ["Stripe live key", "lib/pay.dart", 'const k = "sk_live_' + "a".repeat(24) + '";'],
+  ["GitHub token", "lib/gh.dart", 'const t = "ghp_' + "a".repeat(36) + '";'],
+  ["GitHub fine-grained token", "lib/gh2.dart", 'const t = "github_pat_' + "a".repeat(40) + '";'],
+  ["Slack token", "lib/s.dart", 'const t = "xoxb-' + "1".repeat(12) + "-" + "a".repeat(24) + '";'],
 ];
 
 const MUST_SKIP: [string, string, string][] = [
@@ -34,9 +38,6 @@ const MUST_SKIP: [string, string, string][] = [
 
 // Formats a real tool should know but this one does not. Counted, never failing.
 const KNOWN_GAPS: [string, string, string][] = [
-  ["Stripe live key", "lib/pay.dart", 'const k = "sk_live_' + "a".repeat(24) + '";'],
-  ["GitHub token", "lib/gh.dart", 'const t = "ghp_' + "a".repeat(36) + '";'],
-  ["Slack token", "lib/s.dart", 'const t = "xoxb-' + "1".repeat(12) + "-" + "a".repeat(24) + '";'],
   ["JWT", "lib/j.dart", 'const t = "eyJhbGciOiJIUzI1NiJ9.' + "a".repeat(20) + "." + "b".repeat(20) + '";'],
   ["secret on the next line", "lib/n.dart", "const password =\n    'Zk39sdf82hsd9f';"],
 ];
