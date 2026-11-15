@@ -10,7 +10,7 @@ const KEY_PATTERNS: [string, RegExp][] = [
 
 // Generic "name = value" secrets: weaker evidence, so placeholders and test files are skipped.
 // Group 1 is the key name, group 2 is the value.
-const GENERIC = /(api[_-]?key|secret|token|password)["']?\s*[:=]\s*["']([^"'\s]{8,})["']/i;
+const GENERIC = /([A-Za-z0-9_-]*(?:api[_-]?key|secret|token|password))["']?\s*[:=]\s*["']([^"'\s]{8,})["']/i;
 
 export const SCAN_EXT: ReadonlySet<string> = new Set([
   ".dart", ".js", ".ts", ".py", ".java", ".go", ".kt", ".swift",

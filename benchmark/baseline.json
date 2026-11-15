@@ -33,7 +33,7 @@
     },
     "secrets/hardcoded-secret": {
       "tp": 0,
-      "fp": 1,
+      "fp": 0,
       "unsure": 1
     }
   }
