@@ -159,7 +159,7 @@ export function fromSecret(h: SecretHitLike, projectDir: string): Diagnostic {
     rule: "secrets/hardcoded-secret",
     category: "security",
     severity: "high",
-    confidence: "medium", // pattern match only
+    confidence: h.name === "Generic secret" ? "medium" : "high", // fixed key formats are strong evidence; name = value is weaker
     source: "static",
     message: `Possible hardcoded secret (${h.name})`,
     location,
