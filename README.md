@@ -42,6 +42,9 @@ report <dir>   run every check and print one report (alias: scan)
   --max-file-kb <n> skip files bigger than this (default 1000)
   --fail-on <sev>   exit 1 when a finding has this severity or higher
                     (critical, high, medium, low, info; default: high)
+  --min-confidence <level>
+                    only count findings of this confidence or higher for the exit code
+                    (high, medium, low; default: low, i.e. all findings count)
 
 check <dir>    count files and lines per language
 secrets <dir>  run only the secrets check
@@ -66,7 +69,7 @@ $env:FLUTTER_BIN = "C:\src\flutter\bin\flutter.bat"
 | 1 | There are high or critical findings |
 | 2 | A check or the tool itself failed (for example Flutter was not found), so the report is incomplete |
 
-`--fail-on medium` is noisy on `perf` findings today, because their measured precision is about 50%.
+`--fail-on medium` is noisy on `perf` findings today, because their measured precision is about 50%. `--fail-on high --min-confidence high` fails the build only on findings with a recognisable fixed format; today that means mostly secrets.
 
 A check that was skipped on purpose (`--no-analyze`) or does not apply (not a Flutter project) is reported as `skipped` and does not change the exit code. A check that should have run but could not is reported as `failed` and makes the exit code 2.
 
@@ -78,7 +81,7 @@ A check that was skipped on purpose (`--no-analyze`) or does not apply (not a Fl
 
 The text report groups findings by confidence: **Confirmed** (a fixed, recognisable key format), **Likely**, and **Hints** (heuristics that are often false alarms). Only findings of medium severity or higher are listed in the text report; the JSON report has everything.
 
-Confidence is not a measured precision. `high` on a secret means the key has a recognisable format; no real key of these formats was found in the 20 benchmark projects. `unbounded-read` is a hint because its measured precision is only about 55-65%. Confidence does not change the exit code: `--fail-on` looks at severity only.
+Confidence is not a measured precision. `high` on a secret means the key has a recognisable format; no real key of these formats was found in the 20 benchmark projects. `unbounded-read` is a hint because its measured precision is only about 55-65%. By default confidence does not change the exit code: `--fail-on` looks at severity only. With `--min-confidence`, only findings of that confidence or higher count.
 
 ## Safety
 
