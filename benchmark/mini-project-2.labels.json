@@ -1,0 +1,109 @@
+{
+    "project":  "mini-project-2",
+    "labels":  [
+                   {
+                       "id":  "a3612ab3e795",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/FriendsPage.dart",
+                       "line":  36,
+                       "verdict":  "false",
+                       "note":  "one user\u0027s pending requests, per-user list; read only to count them"
+                   },
+                   {
+                       "id":  "5872dc81f036",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/FriendsPage.dart",
+                       "line":  45,
+                       "verdict":  "false",
+                       "note":  "one user\u0027s friends, per-user list (size not verified)"
+                   },
+                   {
+                       "id":  "9bab54caaf19",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/meetup.dart",
+                       "line":  28,
+                       "verdict":  "false",
+                       "note":  "one user\u0027s meets, per-user list"
+                   },
+                   {
+                       "id":  "e67f6a69165b",
+                       "rule":  "perf/firestore-unbounded-read",
+                       "file":  "lib/requests.dart",
+                       "line":  18,
+                       "verdict":  "false",
+                       "note":  "one user\u0027s requests, per-user list"
+                   },
+                   {
+                       "id":  "c10693d7cb1e",
+                       "rule":  "perf/foreach-async-not-awaited",
+                       "file":  "lib/FriendsPage.dart",
+                       "line":  48,
+                       "verdict":  "true",
+                       "note":  "forEach with async closure that awaits a Firestore read and fills info; done = 1 is set right after, without waiting"
+                   },
+                   {
+                       "id":  "c104131d3a85",
+                       "rule":  "perf/foreach-async-not-awaited",
+                       "file":  "lib/MapsPage.dart",
+                       "line":  103,
+                       "verdict":  "true",
+                       "note":  "forEach async fills info from Firestore reads; filterDuplicates() and return run before the reads finish"
+                   },
+                   {
+                       "id":  "49ec81b91a46",
+                       "rule":  "perf/foreach-async-not-awaited",
+                       "file":  "lib/newschedule.dart",
+                       "line":  92,
+                       "verdict":  "true",
+                       "note":  "forEach async with one Firestore write per invited friend; nothing waits for the writes, errors are lost; the dialog opens right after (weak label)"
+                   },
+                   {
+                       "id":  "7ce34972b5cd",
+                       "rule":  "secrets/hardcoded-secret",
+                       "file":  "android/app/src/main/AndroidManifest.xml",
+                       "line":  17,
+                       "verdict":  "true",
+                       "note":  "Google API key format (39 chars, AIza prefix) in the manifest; may be a restricted Maps key, weak label; value not read"
+                   },
+                   {
+                       "id":  "461932a7b1f5",
+                       "rule":  "secrets/hardcoded-secret",
+                       "file":  "lib/MapsPage.dart",
+                       "line":  46,
+                       "verdict":  "true",
+                       "note":  "Google API key format (39 chars, AIza prefix) in source; Maps keys may be restricted, weak label; value not read"
+                   },
+                   {
+                       "id":  "9e70cc59e23d",
+                       "rule":  "secrets/hardcoded-secret",
+                       "file":  "lib/MapsPage.dart",
+                       "line":  147,
+                       "verdict":  "unsure",
+                       "note":  "113-char value starting with key; probably a URL fragment, not checked"
+                   },
+                   {
+                       "id":  "ec33ed07de97",
+                       "rule":  "secrets/hardcoded-secret",
+                       "file":  "lib/MapsPage.dart",
+                       "line":  150,
+                       "verdict":  "false",
+                       "note":  "64-char value starting with rad; looks like a Places URL fragment, judged from shape only"
+                   },
+                   {
+                       "id":  "0451ebf80980",
+                       "rule":  "secrets/hardcoded-secret",
+                       "file":  "lib/MapsPage.dart",
+                       "line":  153,
+                       "verdict":  "false",
+                       "note":  "73-char value starting with rad; looks like a Places URL fragment, judged from shape only"
+                   },
+                   {
+                       "id":  "27a27b9faf0d",
+                       "rule":  "secrets/hardcoded-secret",
+                       "file":  "lib/MapsPage.dart",
+                       "line":  190,
+                       "verdict":  "false",
+                       "note":  "44-char value starting with \u0026ke; looks like a URL fragment, judged from shape only"
+                   }
+               ]
+}

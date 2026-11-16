@@ -18,11 +18,11 @@
     },
     "perf/firestore-unbounded-read": {
       "tp": 20,
-      "fp": 12,
+      "fp": 16,
       "unsure": 4
     },
     "perf/foreach-async-not-awaited": {
-      "tp": 1,
+      "tp": 4,
       "fp": 0,
       "unsure": 0
     },
@@ -32,9 +32,9 @@
       "unsure": 2
     },
     "secrets/hardcoded-secret": {
-      "tp": 0,
-      "fp": 0,
-      "unsure": 1
+      "tp": 2,
+      "fp": 3,
+      "unsure": 2
     }
   }
 }

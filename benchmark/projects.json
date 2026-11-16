@@ -18,5 +18,6 @@
   { "name": "who-app",         "dir": "real-world/who-app",         "labels": "who-app.labels.json",        "tuned": false },
   { "name": "deshatan",        "dir": "real-world/deshatan",        "labels": "deshatan.labels.json",       "tuned": false },
   { "name": "notes-app",       "dir": "real-world/notes-app",       "labels": "notes-app.labels.json",      "tuned": false },
-  { "name": "shabuq",          "dir": "real-world/shabuq",          "labels": "shabuq.labels.json",         "tuned": false }
+  { "name": "shabuq",          "dir": "real-world/shabuq",          "labels": "shabuq.labels.json",         "tuned": false },
+  { "name": "mini-project-2",  "dir": "real-world/mini-project-2",  "labels": "mini-project-2.labels.json",  "tuned": false }
 ]
