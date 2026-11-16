@@ -103,11 +103,20 @@ export function groupByConfidence(diagnostics: Diagnostic[]): { confirmed: Diagn
 
 const FAIL_ORDER: Severity[] = ["critical", "high", "medium", "low", "info"];
 
-export function exitCodeFor(report: Report, failOn: Severity = "high"): number {
+const CONF_ORDER: Confidence[] = ["high", "medium", "low"];
+
+export function exitCodeFor(report: Report, failOn: Severity = "high", minConfidence: Confidence = "low"): number {
   if (report.checks.some((c) => c.status === "failed")) return 2;
   const limit = FAIL_ORDER.indexOf(failOn);
-  const blocking = FAIL_ORDER.slice(0, limit + 1).reduce((n, s) => n + report.summary.bySeverity[s], 0);
-  return blocking > 0 ? 1 : 0;
+  if (minConfidence === "low") {
+    const blocking = FAIL_ORDER.slice(0, limit + 1).reduce((n, s) => n + report.summary.bySeverity[s], 0);
+    return blocking > 0 ? 1 : 0;
+  }
+  const cLimit = CONF_ORDER.indexOf(minConfidence);
+  const hit = report.diagnostics.some(
+    (d) => FAIL_ORDER.indexOf(d.severity) <= limit && CONF_ORDER.indexOf(d.confidence) <= cLimit,
+  );
+  return hit ? 1 : 0;
 }
 
 /** Same report with everything that changes between runs removed, so two runs print identical JSON. */
@@ -464,7 +473,8 @@ export function registerReport(program: Command, deps: ReportDeps): void {
     .option("--max-file-kb <n>", "skip files larger than this many KB", "1000")
     .option("--stable", "omit timestamps, timings and absolute paths so two runs print identical JSON")
     .option("--fail-on <severity>", "exit 1 when a finding has this severity or higher (critical, high, medium, low, info)", "high")
-    .action((dir: string, opts: { analyze: boolean; json?: boolean; out?: string; maxFileKb: string; stable?: boolean; failOn: string }) => {
+    .option("--min-confidence <level>", "only count findings of this confidence or higher for the exit code (high, medium, low)", "low")
+    .action((dir: string, opts: { analyze: boolean; json?: boolean; out?: string; maxFileKb: string; stable?: boolean; failOn: string; minConfidence: string }) => {
       try {
         const kb = Number(opts.maxFileKb);
         if (!Number.isFinite(kb) || kb <= 0) throw new Error("--max-file-kb must be a positive number");
@@ -515,7 +525,10 @@ export function registerReport(program: Command, deps: ReportDeps): void {
         if (!FAIL_ORDER.includes(opts.failOn as Severity)) {
           throw new Error("--fail-on must be one of: " + FAIL_ORDER.join(", "));
         }
-        process.exitCode = exitCodeFor(report, opts.failOn as Severity);
+        if (!CONF_ORDER.includes(opts.minConfidence as Confidence)) {
+          throw new Error("--min-confidence must be one of: " + CONF_ORDER.join(", "));
+        }
+        process.exitCode = exitCodeFor(report, opts.failOn as Severity, opts.minConfidence as Confidence);
         if (!opts.json) {
           console.log(`\nExit code ${process.exitCode} (0 clean, 1 high/critical findings, 2 a check failed)`);
         }
