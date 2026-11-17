@@ -10,6 +10,14 @@
                        "note":  "public read of the cats catalog is intended (author comment: Allow public read access to all cats); write requires isAdmin(). Rule fix was written from e-school, so this is a hold-out label"
                    },
                    {
+                       "id":  "9627d8b08e77",
+                       "rule":  "firestore-rules/open-access",
+                       "file":  "firebase/storage.rules",
+                       "line":  4,
+                       "verdict":  "unsure",
+                       "note":  "public read of the whole storage bucket under {allPaths=**}; probably for the cat images, intent not documented; no write rule. Labelled after the rule was written, not a hold-out"
+                   },
+                   {
                        "id":  "bb7d49475c2b",
                        "rule":  "perf/firestore-unbounded-read",
                        "file":  "lib/services/api.dart",

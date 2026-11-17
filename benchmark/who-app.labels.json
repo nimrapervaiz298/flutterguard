@@ -2,6 +2,14 @@
     "project":  "who-app",
     "labels":  [
                    {
+                       "id":  "9d536057c6a6",
+                       "rule":  "firestore-rules/auth-only-write",
+                       "file":  "server/storage.rules",
+                       "line":  7,
+                       "verdict":  "true",
+                       "note":  "allow read, write if request.auth != null under {allPaths=**}: any signed-in user can read and write the whole bucket. The comment above says no direct reads or writes are allowed, so code and comment disagree. Not a hold-out"
+                   },
+                   {
                        "id":  "4459abbc1235",
                        "rule":  "firestore-rules/open-access",
                        "file":  "server/firestore.rules",
