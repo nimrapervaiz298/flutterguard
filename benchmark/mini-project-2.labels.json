@@ -78,32 +78,32 @@
                        "rule":  "secrets/hardcoded-secret",
                        "file":  "lib/MapsPage.dart",
                        "line":  147,
-                       "verdict":  "unsure",
-                       "note":  "113-char value starting with key; probably a URL fragment, not checked"
+                       "verdict":  "true",
+                       "note":  "Google API key format (pattern match) inside a Places URL string; Maps keys may be restricted, weak label. Earlier label (false/unsure) was a wrong guess from shape"
                    },
                    {
                        "id":  "ec33ed07de97",
                        "rule":  "secrets/hardcoded-secret",
                        "file":  "lib/MapsPage.dart",
                        "line":  150,
-                       "verdict":  "false",
-                       "note":  "64-char value starting with rad; looks like a Places URL fragment, judged from shape only"
+                       "verdict":  "true",
+                       "note":  "Google API key format (pattern match) inside a Places URL string; Maps keys may be restricted, weak label. Earlier label (false/unsure) was a wrong guess from shape"
                    },
                    {
                        "id":  "0451ebf80980",
                        "rule":  "secrets/hardcoded-secret",
                        "file":  "lib/MapsPage.dart",
                        "line":  153,
-                       "verdict":  "false",
-                       "note":  "73-char value starting with rad; looks like a Places URL fragment, judged from shape only"
+                       "verdict":  "true",
+                       "note":  "Google API key format (pattern match) inside a Places URL string; Maps keys may be restricted, weak label. Earlier label (false/unsure) was a wrong guess from shape"
                    },
                    {
                        "id":  "27a27b9faf0d",
                        "rule":  "secrets/hardcoded-secret",
                        "file":  "lib/MapsPage.dart",
                        "line":  190,
-                       "verdict":  "false",
-                       "note":  "44-char value starting with \u0026ke; looks like a URL fragment, judged from shape only"
+                       "verdict":  "true",
+                       "note":  "Google API key format (pattern match) inside a Places URL string; Maps keys may be restricted, weak label. Earlier label (false/unsure) was a wrong guess from shape"
                    }
                ]
 }

@@ -32,9 +32,9 @@
       "unsure": 2
     },
     "secrets/hardcoded-secret": {
-      "tp": 2,
-      "fp": 3,
-      "unsure": 2
+      "tp": 6,
+      "fp": 0,
+      "unsure": 1
     }
   }
 }
