@@ -392,7 +392,7 @@ export function buildReport(
 
   timed("firestore-rules", () => {
     for (const file of walk(dir)) {
-      if (path.basename(file) !== "firestore.rules") continue;
+      if (!["firestore.rules", "storage.rules"].includes(path.basename(file))) continue;
       for (const f of findRulesIssues(readText(file))) {
         diagnostics.push(fromRules(f, file, dir));
       }
