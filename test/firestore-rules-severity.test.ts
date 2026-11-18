@@ -14,8 +14,8 @@ test("public create on a specific collection is high", () => {
   assert.deepEqual(sev("match /cats/{id} {\n  allow create: if true;\n}"), ["high"]);
 });
 
-test("public read on a specific collection stays low", () => {
-  assert.deepEqual(sev("match /cats/{id} {\n  allow read;\n}"), ["low"]);
+test("public read on a specific collection is info", () => {
+  assert.deepEqual(sev("match /cats/{id} {\n  allow read;\n}"), ["info"]);
 });
 
 test("public read under a recursive wildcard is high", () => {

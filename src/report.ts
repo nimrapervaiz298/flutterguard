@@ -333,7 +333,7 @@ export function fromRules(
   return makeDiagnostic({
     rule: `firestore-rules/${f.rule}`,
     category: "security",
-    severity: open ? (wide || writes ? "high" : "low") : "medium",
+    severity: open ? (wide || writes ? "high" : "info") : "medium", // a public read of one collection was a false alarm in 12 of 13 labelled cases
     confidence: open ? "medium" : "low", // some apps keep login-only rules on purpose
     source: "static",
     message: open ? "Firestore rule allows everyone" : "Firestore rule only checks that the user is logged in",

@@ -30,8 +30,8 @@ test("open create without a condition on a specific collection is high", () => {
   assert.deepEqual(severities(wrap("match /cats/{id} {\n allow create;\n}")), ["high"]);
 });
 
-test("open read on a specific collection stays low", () => {
-  assert.deepEqual(severities(wrap("match /cats/{id} {\n allow read;\n}")), ["low"]);
+test("open read on a specific collection is info", () => {
+  assert.deepEqual(severities(wrap("match /cats/{id} {\n allow read;\n}")), ["info"]);
 });
 
 test("open read under a recursive wildcard is high", () => {
