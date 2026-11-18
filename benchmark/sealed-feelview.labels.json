@@ -1,0 +1,13 @@
+{
+    "project":  "sealed-feelview",
+    "labels":  [
+                   {
+                       "id":  "c26d3b5a5f87",
+                       "rule":  "firestore-rules/open-access",
+                       "file":  "firestore.rules",
+                       "line":  8,
+                       "verdict":  "true",
+                       "note":  "whole database readable and writable without login; comment calls it MVP dev mode"
+                   }
+               ]
+}

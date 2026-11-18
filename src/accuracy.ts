@@ -14,6 +14,7 @@ export interface ProjectEntry {
   dir: string; // relative to the benchmark root
   labels: string; // relative to the manifest file
   tuned: boolean; // true when a rule was written or tuned while looking at this project
+  rulesOnly?: string[]; // when set, only findings of rules starting with one of these prefixes count as waiting for a label
 }
 export interface KnownBug {
   project: string;
@@ -104,7 +105,8 @@ export function evaluate(inputs: ProjectInput[], known: KnownBug[]): Evaluation 
     }
     for (const x of inp.diagnostics) {
       seenRules.add(x.rule);
-      if (labeledRules.has(x.rule) && !decidedIds.has(x.id)) {
+      const inScope = !inp.entry.rulesOnly || inp.entry.rulesOnly.some((pre) => x.rule.startsWith(pre));
+      if (inScope && labeledRules.has(x.rule) && !decidedIds.has(x.id)) {
         unlabeled.push({
           project: inp.entry.name,
           rule: x.rule,

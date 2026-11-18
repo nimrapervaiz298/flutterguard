@@ -2,13 +2,13 @@
   "version": 1,
   "rules": {
     "firestore-rules/auth-only-write": {
-      "tp": 5,
+      "tp": 6,
       "fp": 0,
       "unsure": 0
     },
     "firestore-rules/open-access": {
-      "tp": 1,
-      "fp": 5,
+      "tp": 2,
+      "fp": 17,
       "unsure": 1
     },
     "perf/firestore-query-without-limit": {

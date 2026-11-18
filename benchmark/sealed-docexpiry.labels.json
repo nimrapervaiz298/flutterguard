@@ -1,0 +1,13 @@
+{
+    "project":  "sealed-docexpiry",
+    "labels":  [
+                   {
+                       "id":  "637afe1d3376",
+                       "rule":  "firestore-rules/open-access",
+                       "file":  "firestore.rules",
+                       "line":  53,
+                       "verdict":  "false",
+                       "note":  "app_config public read for OTA update checks (comment), write false"
+                   }
+               ]
+}

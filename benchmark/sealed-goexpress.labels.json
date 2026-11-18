@@ -1,0 +1,37 @@
+{
+    "project":  "sealed-goexpress",
+    "labels":  [
+                   {
+                       "id":  "f6e44a508f2e",
+                       "rule":  "firestore-rules/auth-only-write",
+                       "file":  "firestore.rules",
+                       "line":  40,
+                       "verdict":  "true",
+                       "note":  "bookings create only checks login, while read and update check userId; weak label"
+                   },
+                   {
+                       "id":  "637afe1d3376",
+                       "rule":  "firestore-rules/open-access",
+                       "file":  "firestore.rules",
+                       "line":  24,
+                       "verdict":  "false",
+                       "note":  "agencies public catalog, write false"
+                   },
+                   {
+                       "id":  "f6d7f49e57ed",
+                       "rule":  "firestore-rules/open-access",
+                       "file":  "firestore.rules",
+                       "line":  30,
+                       "verdict":  "false",
+                       "note":  "travels public catalog, write false"
+                   },
+                   {
+                       "id":  "cc84730fd9eb",
+                       "rule":  "firestore-rules/open-access",
+                       "file":  "storage.rules",
+                       "line":  5,
+                       "verdict":  "false",
+                       "note":  "agencies folder public read, write false; high severity came from the allPaths wildcard inside a folder"
+                   }
+               ]
+}

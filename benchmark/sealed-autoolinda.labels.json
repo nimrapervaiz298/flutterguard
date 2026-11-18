@@ -1,0 +1,69 @@
+{
+    "project":  "sealed-autoolinda",
+    "labels":  [
+                   {
+                       "id":  "637afe1d3376",
+                       "rule":  "firestore-rules/open-access",
+                       "file":  "firestore.rules",
+                       "line":  102,
+                       "verdict":  "false",
+                       "note":  "public read of a catalog or documented public data; write limited to isAdmin()"
+                   },
+                   {
+                       "id":  "f6d7f49e57ed",
+                       "rule":  "firestore-rules/open-access",
+                       "file":  "firestore.rules",
+                       "line":  108,
+                       "verdict":  "false",
+                       "note":  "public read of a catalog or documented public data; write limited to isAdmin()"
+                   },
+                   {
+                       "id":  "7a81b832481a",
+                       "rule":  "firestore-rules/open-access",
+                       "file":  "firestore.rules",
+                       "line":  114,
+                       "verdict":  "false",
+                       "note":  "public read of a catalog or documented public data; write limited to isAdmin()"
+                   },
+                   {
+                       "id":  "ffec02815f05",
+                       "rule":  "firestore-rules/open-access",
+                       "file":  "firestore.rules",
+                       "line":  120,
+                       "verdict":  "false",
+                       "note":  "public read of a catalog or documented public data; write limited to isAdmin()"
+                   },
+                   {
+                       "id":  "718d5e755cf1",
+                       "rule":  "firestore-rules/open-access",
+                       "file":  "firestore.rules",
+                       "line":  190,
+                       "verdict":  "false",
+                       "note":  "public read of a catalog or documented public data; write limited to isAdmin()"
+                   },
+                   {
+                       "id":  "6579043f5fea",
+                       "rule":  "firestore-rules/open-access",
+                       "file":  "firestore.rules",
+                       "line":  206,
+                       "verdict":  "false",
+                       "note":  "public read of a catalog or documented public data; write limited to isAdmin()"
+                   },
+                   {
+                       "id":  "7040a89ad908",
+                       "rule":  "firestore-rules/open-access",
+                       "file":  "firestore.rules",
+                       "line":  227,
+                       "verdict":  "false",
+                       "note":  "public read of a catalog or documented public data; write limited to isAdmin()"
+                   },
+                   {
+                       "id":  "b5b4f66b0122",
+                       "rule":  "firestore-rules/open-access",
+                       "file":  "firestore.rules",
+                       "line":  283,
+                       "verdict":  "false",
+                       "note":  "public read of a catalog or documented public data; write limited to isAdmin()"
+                   }
+               ]
+}
