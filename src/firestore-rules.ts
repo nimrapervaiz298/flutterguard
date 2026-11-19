@@ -27,7 +27,7 @@ function scopeAt(masked: string, idx: number): "wide" | "narrow" {
   while ((m = re.exec(before)) !== null) {
     if (m[0] === "}") stack.pop();
     else if (m[0] === "{") stack.push(false);
-    else stack.push(/=\*\*/.test(m[1]));
+    else stack.push(/^\s*\/\{[A-Za-z0-9_]+=\*\*\}\s*$/.test(m[1])); // only a wildcard directly under the root is database-wide
   }
   return stack.some(Boolean) ? "wide" : "narrow";
 }
