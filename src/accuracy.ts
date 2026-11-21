@@ -195,6 +195,7 @@ export function toMarkdown(ev: Evaluation, measured: string[]): string {
   out.push(`- Findings still waiting for a label: ${ev.unlabeled.length}`);
   out.push(`- Known bugs detected: ${ev.known.detected} of ${ev.known.total}`);
   for (const m of ev.known.missed) out.push(`  - missed: ${m}`);
+  for (const g of ev.known.gaps) out.push(`  - gap (no rule yet): ${g}`);
   out.push("");
   out.push(`Rules with no labels at all (accuracy unknown): ${ev.unmeasured.length ? ev.unmeasured.join(", ") : "none"}`);
   out.push("");
@@ -286,6 +287,7 @@ export function registerAccuracy(program: Command, deps: ReportDeps): void {
           console.log(`\nLabelled false alarms that no longer appear: ${ev.resolvedFalse}`);
           console.log(`Known bugs detected: ${ev.known.detected} of ${ev.known.total}`);
           ev.known.missed.forEach((m) => console.log(`  missed: ${m}`));
+          ev.known.gaps.forEach((g) => console.log(`  gap (no rule yet): ${g}`));
           console.log(`Findings still waiting for a label: ${ev.unlabeled.length}`);
           ev.unlabeled.slice(0, 10).forEach((u) => console.log(`  ${u.project}: ${u.rule} ${u.file}:${u.line}`));
           if (ev.unmeasured.length) console.log(`Rules with no labels (accuracy unknown): ${ev.unmeasured.join(", ")}`);

@@ -18,6 +18,6 @@ Projects measured: fyp, flutter-samples, chatdashboard, easyshop, collections, t
 - Labelled real problems that are no longer found: 0
 - Findings still waiting for a label: 0
 - Known bugs detected: 1 of 2
-  - missed: collections: lib/cart_provider.dart - decreaseQty reads the whole cart and updates docs.first instead of the document of the item (confirmed by reading the code, line 170; not reproduced in the running app)
+  - gap (no rule yet): collections: lib/cart_provider.dart - decreaseQty reads the whole cart and updates docs.first instead of the document of the item (confirmed by reading the code, line 170; not reproduced in the running app)
 
 Rules with no labels at all (accuracy unknown): bloat/long-method, secrets/firebase-config-key
