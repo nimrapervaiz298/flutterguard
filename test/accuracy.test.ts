@@ -86,7 +86,7 @@ test("findings of a labelled rule without a decided label are reported as unlabe
   assert.deepEqual(ev.unmeasured, ["bloat/y"]);
 });
 
-test("known bugs: a rule that finds the bug is detected, no rule means missed, absent project is not counted", () => {
+test("known bugs: a rule that finds the bug is detected, no rule means a gap, absent project is not counted", () => {
   const known: KnownBug[] = [
     { project: "p", file: "lib/a.dart", description: "found by a rule", rule: "perf/x" },
     { project: "p", file: "lib/c.dart", description: "no rule yet", rule: null },
@@ -95,8 +95,8 @@ test("known bugs: a rule that finds the bug is detected, no rule means missed, a
   const ev = evaluate([input("p", false, [d("1", "perf/x", "lib/a.dart")], [lab("1", "perf/x", "true")])], known);
   assert.equal(ev.known.total, 2);
   assert.equal(ev.known.detected, 1);
-  assert.equal(ev.known.missed.length, 1);
-  assert.match(ev.known.missed[0], /no rule yet/);
+  assert.equal(ev.known.missed.length, 0); assert.equal(ev.known.gaps.length, 1);
+  assert.match(ev.known.gaps[0], /no rule yet/);
 });
 
 test("compare without a baseline only reports lost real problems", () => {

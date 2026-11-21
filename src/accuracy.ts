@@ -21,6 +21,7 @@ export interface KnownBug {
   file: string;
   description: string;
   rule: string | null; // null = no rule catches this yet
+  origin?: string; // how this bug relates to the rules (found before the rule, or the rule was built from it)
 }
 export interface ProjectInput {
   entry: ProjectEntry;
@@ -43,7 +44,7 @@ export interface Evaluation {
   resolvedFalse: number;
   unlabeled: { project: string; rule: string; file: string; line: number }[];
   unmeasured: string[];
-  known: { total: number; detected: number; missed: string[] };
+  known: { total: number; detected: number; missed: string[]; gaps: string[] };
 }
 export interface Baseline {
   version: 1;
@@ -117,7 +118,7 @@ export function evaluate(inputs: ProjectInput[], known: KnownBug[]): Evaluation 
     }
   }
 
-  const knownResult = { total: 0, detected: 0, missed: [] as string[] };
+  const knownResult = { total: 0, detected: 0, missed: [] as string[], gaps: [] as string[] };
   for (const kb of known) {
     const inp = inputs.find((i) => i.entry.name === kb.project);
     if (!inp) continue; // project not on this machine: not counted
@@ -125,11 +126,12 @@ export function evaluate(inputs: ProjectInput[], known: KnownBug[]): Evaluation 
     const file = posix(kb.file);
     const hit = kb.rule !== null && inp.diagnostics.some((x) => x.rule === kb.rule && x.location?.file === file);
     if (hit) knownResult.detected++;
-    else knownResult.missed.push(`${kb.project}: ${file} - ${kb.description}`);
+    else (kb.rule === null ? knownResult.gaps : knownResult.missed).push(`${kb.project}: ${file} - ${kb.description}`);
   }
 
   lostTrue.sort();
   knownResult.missed.sort();
+  knownResult.gaps.sort();
   unlabeled.sort(
     (a, b) =>
       a.project.localeCompare(b.project) ||
