@@ -1,14 +1,44 @@
 [
-  {
-    "project": "easyshop",
-    "file": "lib/repositories/cloud_functions.dart",
-    "description": "forEach with an async closure: awaiting forEach does not wait for the deletes",
-    "rule": "perf/foreach-async-not-awaited"
-  },
-  {
-    "project": "collections",
-    "file": "lib/cart_provider.dart",
-    "description": "decreaseQty reads the whole cart and updates docs.first instead of the document of the item (confirmed by reading the code, line 170; not reproduced in the running app)",
-    "rule": null
-  }
+    {
+        "project":  "easyshop",
+        "file":  "lib/repositories/cloud_functions.dart",
+        "description":  "forEach with an async closure: awaiting forEach does not wait for the deletes",
+        "rule":  "perf/foreach-async-not-awaited",
+        "origin":  "rule written from this project"
+    },
+    {
+        "project":  "collections",
+        "file":  "lib/cart_provider.dart",
+        "description":  "decreaseQty reads the whole cart and updates docs.first instead of the document of the item (confirmed by reading the code, line 170; not reproduced in the running app)",
+        "rule":  null,
+        "origin":  "found by reading the code; no rule"
+    },
+    {
+        "project":  "sealed-feelview",
+        "file":  "firestore.rules",
+        "description":  "match /{document=**} has allow read, write: if true (line 8): the whole database is open",
+        "rule":  "firestore-rules/open-access",
+        "origin":  "found after the rule existed; file was seen; later scope fixes were written after seeing this set"
+    },
+    {
+        "project":  "timy",
+        "file":  "firebase/firestore.rules",
+        "description":  "/calendar/{calendarId} allows read and write to any signed-in user (lines 7-9)",
+        "rule":  "firestore-rules/auth-only-write",
+        "origin":  "rule written from this project"
+    },
+    {
+        "project":  "who-app",
+        "file":  "server/storage.rules",
+        "description":  "match /{allPaths=**} allows read and write to any signed-in user (line 7) while the comment above says direct access is denied",
+        "rule":  "firestore-rules/auth-only-write",
+        "origin":  "found while labelling, after the rule existed; file seen, not a hold-out"
+    },
+    {
+        "project":  "videocall",
+        "file":  "lib/presentaion/cubit/home/home_cubit.dart",
+        "description":  "call history streams the whole calls collection and filters by user on the client (line 86 comment says so; same in home_api.dart line 20 and getCallHistory line 125)",
+        "rule":  null,
+        "origin":  "found by reading the code; no rule"
+    }
 ]

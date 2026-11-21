@@ -17,7 +17,8 @@ Projects measured: fyp, flutter-samples, chatdashboard, easyshop, collections, t
 - Labelled false alarms that no longer appear: 21
 - Labelled real problems that are no longer found: 0
 - Findings still waiting for a label: 0
-- Known bugs detected: 1 of 2
+- Known bugs detected: 4 of 6
   - gap (no rule yet): collections: lib/cart_provider.dart - decreaseQty reads the whole cart and updates docs.first instead of the document of the item (confirmed by reading the code, line 170; not reproduced in the running app)
+  - gap (no rule yet): videocall: lib/presentaion/cubit/home/home_cubit.dart - call history streams the whole calls collection and filters by user on the client (line 86 comment says so; same in home_api.dart line 20 and getCallHistory line 125)
 
 Rules with no labels at all (accuracy unknown): bloat/long-method, secrets/firebase-config-key
