@@ -81,7 +81,7 @@ A check that was skipped on purpose (`--no-analyze`) or does not apply (not a Fl
 
 The text report groups findings by confidence: **Confirmed** (a fixed, recognisable key format), **Likely**, and **Hints** (heuristics that are often false alarms). Only findings of medium severity or higher are listed in the text report; the JSON report has everything.
 
-Confidence is not a measured precision. `high` on a secret means the key has a recognisable format; no real key of these formats was found in the 20 benchmark projects. `unbounded-read` is a hint because its measured precision is only about 55-65%. By default confidence does not change the exit code: `--fail-on` looks at severity only. With `--min-confidence`, only findings of that confidence or higher count.
+Confidence is not a measured precision. `high` on a secret means the key has a recognisable format; the only true secrets label so far is one Google Maps key repeated in one project (labelled weak, because Maps keys can be restricted), found in the 26 benchmark projects. `unbounded-read` is a hint because its measured precision is only about 50-56%. By default confidence does not change the exit code: `--fail-on` looks at severity only. With `--min-confidence`, only findings of that confidence or higher count.
 
 No rule is "supported" yet. We would call a rule supported only with 30 or more independent labels at 80% precision or better, checked on a sealed set. No rule meets that today, so treat every finding as a hint, including the Confirmed tier: that tier means a recognisable key format, not a measured precision. The current numbers are in `benchmark/RESULTS.md`.
 
