@@ -2,7 +2,7 @@
   "version": 1,
   "rules": {
     "firestore-rules/auth-only-write": {
-      "tp": 6,
+      "tp": 7,
       "fp": 0,
       "unsure": 2
     },

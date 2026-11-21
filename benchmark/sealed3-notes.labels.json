@@ -1,0 +1,13 @@
+{
+  "project": "sealed3-notes",
+  "labels": [
+    {
+      "id": "af5f5f0a02b2",
+      "rule": "firestore-rules/auth-only-write",
+      "file": "backend/firestore.rules",
+      "line": 7,
+      "verdict": "true",
+      "note": "whole database /{document=**}: allow write is login-only (line 7), no ownership check; read is false but write covers update and delete too, so any signed-in user can overwrite or delete any document; read from the rules text, not tested in the emulator; file was opened to label, so it is seen"
+    }
+  ]
+}
