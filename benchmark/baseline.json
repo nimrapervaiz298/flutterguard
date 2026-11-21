@@ -4,11 +4,11 @@
     "firestore-rules/auth-only-write": {
       "tp": 6,
       "fp": 0,
-      "unsure": 0
+      "unsure": 2
     },
     "firestore-rules/open-access": {
       "tp": 2,
-      "fp": 17,
+      "fp": 19,
       "unsure": 1
     },
     "perf/firestore-query-without-limit": {

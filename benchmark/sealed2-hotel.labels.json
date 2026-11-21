@@ -1,0 +1,37 @@
+{
+    "project":  "sealed2-hotel",
+    "labels":  [
+                   {
+                       "id":  "f6e44a508f2e",
+                       "rule":  "firestore-rules/auth-only-write",
+                       "file":  "firestore.rules",
+                       "line":  130,
+                       "verdict":  "unsure",
+                       "note":  "booking_failures create is login-only, but it is best-effort diagnostics and read/update/delete are false; isSignedIn() definition not read"
+                   },
+                   {
+                       "id":  "c01251c60359",
+                       "rule":  "firestore-rules/auth-only-write",
+                       "file":  "firestore.rules",
+                       "line":  167,
+                       "verdict":  "unsure",
+                       "note":  "dev copy of booking_failures, same pattern"
+                   },
+                   {
+                       "id":  "637afe1d3376",
+                       "rule":  "firestore-rules/open-access",
+                       "file":  "firestore.rules",
+                       "line":  109,
+                       "verdict":  "false",
+                       "note":  "rooms: public catalog, comment says guests may browse; write false"
+                   },
+                   {
+                       "id":  "f6d7f49e57ed",
+                       "rule":  "firestore-rules/open-access",
+                       "file":  "firestore.rules",
+                       "line":  147,
+                       "verdict":  "false",
+                       "note":  "dev_rooms: dev copy of the public catalog; write false"
+                   }
+               ]
+}

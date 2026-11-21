@@ -23,5 +23,6 @@
   { "name": "sealed-autoolinda", "dir": "real-world/sealed-autoolinda", "labels": "sealed-autoolinda.labels.json", "tuned": false, "sealed": true, "rulesOnly": ["firestore-rules/"] },
   { "name": "sealed-docexpiry",  "dir": "real-world/sealed-docexpiry",  "labels": "sealed-docexpiry.labels.json",  "tuned": false, "sealed": true, "rulesOnly": ["firestore-rules/"] },
   { "name": "sealed-feelview",   "dir": "real-world/sealed-feelview",   "labels": "sealed-feelview.labels.json",   "tuned": false, "sealed": true, "rulesOnly": ["firestore-rules/"] },
-  { "name": "sealed-goexpress",  "dir": "real-world/sealed-goexpress",  "labels": "sealed-goexpress.labels.json",  "tuned": false, "sealed": true, "rulesOnly": ["firestore-rules/"] }
+  { "name": "sealed-goexpress",  "dir": "real-world/sealed-goexpress",  "labels": "sealed-goexpress.labels.json",  "tuned": false, "sealed": true, "rulesOnly": ["firestore-rules/"] },
+  { "name": "sealed2-hotel", "dir": "real-world/sealed2-hotel", "labels": "sealed2-hotel.labels.json", "tuned": false, "sealed": true, "rulesOnly": ["firestore-rules/"] }
 ]
