@@ -127,7 +127,7 @@ npx tsx src/index.ts bench score report.json benchmark/myproject.labels.json
 ## Known limits
 
 - Roughly half of the performance findings were false alarms in our measurements. Check each one before acting.
-- The secrets check knows Google API keys, AWS access keys, private key headers, Stripe, GitHub and Slack tokens, and generic `name = value` secrets. It does not detect JWTs, and a secret whose value is on the line after its name is not detected. On a small author-made test set it caught all 16 examples of the formats it knows and 0 of 2 of the others. No real key of these formats was found in the 20 benchmark projects, so real-world precision and recall are unmeasured. The token lengths come from memory and were not checked against provider documentation.
+- The secrets check knows Google API keys, AWS access keys, private key headers, Stripe, GitHub and Slack tokens, and generic `name = value` secrets. It does not detect JWTs, and a secret whose value is on the line after its name is not detected. On a small author-made test set it caught all 16 examples of the formats it knows and 0 of 2 of the others. The only true label in the 26 benchmark projects is one Google Maps key repeated in one project (labelled weak), so real-world precision and recall are unmeasured. The token lengths come from memory and were not checked against provider documentation.
 - `bloat` is estimated from braces and can be wrong on unusual syntax.
 - The secrets check skips `web/__/firebase/` and lines over 1000 characters, a rule written from one false alarm; other vendored folders are still scanned.
 - A Firestore read through a variable (for example `final ref = collection(path); await ref.get()`) is not detected.
