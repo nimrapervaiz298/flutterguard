@@ -47,3 +47,19 @@ export function agreement(key: KeyEntry[], answers: Map<number, string>): Agreem
   }
   return r;
 }
+
+export function formatAgreement(r: Agreement): string {
+  const pct = r.compared === 0 ? "n/a" : `${r.agree} of ${r.compared} (${Math.round((r.agree / r.compared) * 100)}%)`;
+  const out: string[] = [];
+  out.push(`compared: ${r.compared}`);
+  out.push(`agree: ${pct}`);
+  out.push(`unsure on either side: ${r.unsure}`);
+  out.push(`unanswered: ${r.unanswered}`);
+  if (r.disagree.length) {
+    out.push("disagreements:");
+    for (const d of r.disagree) out.push(`  #${d.n} ${d.rule} (${d.project}): key says ${d.verdict}`);
+  }
+  out.push("");
+  out.push("Agreement is only over items where both gave true or false. It is not precision, and 30 items is a small sample.");
+  return out.join("\n");
+}
