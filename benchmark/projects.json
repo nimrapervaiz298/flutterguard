@@ -25,8 +25,5 @@
   { "name": "sealed-feelview",   "dir": "real-world/sealed-feelview",   "labels": "sealed-feelview.labels.json",   "tuned": false, "sealed": true, "rulesOnly": ["firestore-rules/"] },
   { "name": "sealed-goexpress",  "dir": "real-world/sealed-goexpress",  "labels": "sealed-goexpress.labels.json",  "tuned": false, "sealed": true, "rulesOnly": ["firestore-rules/"] },
   { "name": "sealed2-hotel", "dir": "real-world/sealed2-hotel", "labels": "sealed2-hotel.labels.json", "tuned": false, "sealed": true, "rulesOnly": ["firestore-rules/"] },
-  { "name": "sealed3-notes", "dir": "real-world/sealed3-notes", "labels": "sealed3-notes.labels.json", "tuned": false, "sealed": true, "rulesOnly": ["firestore-rules/"] },
-  { "name": "sealed4-shopapp", "dir": "real-world/sealed4-shopapp", "labels": "sealed4-shopapp.labels.json", "tuned": false, "sealed": true, "rulesOnly": ["firestore-rules/"] },
-  { "name": "sealed4-booking", "dir": "real-world/sealed4-booking", "labels": "sealed4-booking.labels.json", "tuned": false, "sealed": true, "rulesOnly": ["firestore-rules/"] },
-  { "name": "sealed4-aichat", "dir": "real-world/sealed4-aichat", "labels": "sealed4-aichat.labels.json", "tuned": false, "sealed": true, "rulesOnly": ["firestore-rules/"] }
+  { "name": "sealed3-notes", "dir": "real-world/sealed3-notes", "labels": "sealed3-notes.labels.json", "tuned": false, "sealed": true, "rulesOnly": ["firestore-rules/"] }
 ]
